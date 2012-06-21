@@ -3,54 +3,33 @@
 
 import gi
 import sys
+import station
 
-try:
-	gi.require_version('Gst','1.0')
-except ValueError:
-	print 'Could not find required Gstreamer library'
-	sys.exit(1)
-
-from gi.repository import GObject, Gst, Gtk
-print Gst.version_string()
+from gi.repository import GObject, Gtk
 
 class Main:
 	def __init__(self):
 		GObject.threads_init()
-		Gst.init(None)
+		win = Gtk.Window()
+		button = Gtk.Button(label="Swap")
+		button.connect("clicked", self.on_swap)
+		win.add(button)
+		win.show_all()
 		
-		self.pipeline = Gst.Pipeline()
-
-		src = Gst.ElementFactory.make('v4l2src', None)
-		caps_filter = Gst.ElementFactory.make('capsfilter', None)
-		sink = Gst.ElementFactory.make('xvimagesink', None)
-
-		caps_filter.set_property('caps',Gst.caps_from_string("video/x-raw, width=640, height=480"))
-
-		self.pipeline.add(src)
-		self.pipeline.add(caps_filter)
-		self.pipeline.add(sink)
-
-		src.link(caps_filter)
-		caps_filter.link(sink)
-
-		bus = self.pipeline.get_bus()
-		bus.connect('message::eos', self.on_bus_eos)
-		bus.connect('message', self.on_bus_message)
-		bus.add_signal_watch()
-
-	def on_bus_message(self, bus, message):
-		print message
-		print "here"
+		win.connect("delete-event", self.on_quit)
 		
-	def on_bus_eos(self, bus, message):
-		print message
-		print "eos"
-		sys.exit(0)
+		self.station = station.Station()
 		
 	def run(self):
-		self.pipeline.set_state(Gst.State.PLAYING)
-		GObject.MainLoop().run()
-
+		self.station.run()
+		Gtk.main()
+		
+	def on_quit(self, event, user_data):
+		self.station.stop()
+		Gtk.main_quit()
+		
+	def on_swap(self, widget):
+		self.station.swap()
 
 if __name__ == "__main__":
 	Main().run()

@@ -1,0 +1,26 @@
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=false
+detect_indent_width=false
+indent_mode=2
+
+[project]
+name=Open Playout
+base_path=/home/lsimons/open-playout/
+description=
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=1
+FILE_NAME_0=356;Python;0;16;1;1;0;/home/lsimons/open-playout/main.py;0;4
+FILE_NAME_1=289;Python;0;16;1;1;0;/home/lsimons/open-playout/station.py;0;4
+FILE_NAME_2=195;Markdown;0;16;1;1;0;/home/lsimons/open-playout/README.md;0;4
+
+[VTE]
+last_dir=/home/lsimons
