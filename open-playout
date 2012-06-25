@@ -18,8 +18,8 @@ long_line_column=72
 
 [files]
 current_page=1
-FILE_NAME_0=356;Python;0;16;1;1;0;/home/lsimons/open-playout/main.py;0;4
-FILE_NAME_1=289;Python;0;16;1;1;0;/home/lsimons/open-playout/station.py;0;4
+FILE_NAME_0=173;Python;0;16;1;1;0;/home/lsimons/open-playout/main.py;0;4
+FILE_NAME_1=28;Python;0;16;1;1;0;/home/lsimons/open-playout/station.py;0;4
 FILE_NAME_2=195;Markdown;0;16;1;1;0;/home/lsimons/open-playout/README.md;0;4
 
 [VTE]
