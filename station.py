@@ -1,5 +1,6 @@
 import gi
 import sys
+import camera
 
 try:
 	gi.require_version('Gst','1.0')
@@ -15,32 +16,42 @@ class Station(object):
 		Gst.init(None)
 				
 		self.pipeline = Gst.Pipeline()
-
-		src = Gst.ElementFactory.make('v4l2src', None)
-		caps_filter = Gst.ElementFactory.make('capsfilter', None)
+		self.cam1 = camera.Camera('cam1')
+		self.add_equipment(self.cam1)
+		
 		self.sink = Gst.ElementFactory.make('xvimagesink', None)
-
-		caps_filter.set_property('caps',Gst.caps_from_string("video/x-raw, width=640, height=480"))
-
-		self.pipeline.add(src)
-		self.pipeline.add(caps_filter)
 		self.pipeline.add(self.sink)
+		
+		self.cam1.src().link(self.sink)
 
-		src.link(caps_filter)
-		caps_filter.link(self.sink)
-
-		bus = self.pipeline.get_bus()
-		bus.connect('message::eos', self.on_bus_eos)
-		bus.connect('message', self.on_bus_message)
-		bus.add_signal_watch()
+		self.bus = self.pipeline.get_bus()
+		self.bus.connect('message::eos', self.on_bus_eos)
+		self.bus.connect('sync-message::element', self.on_sync_message)
+		self.bus.connect('message', self.on_bus_message)
+		self.bus.add_signal_watch()
+	
+	def add_equipment(self, equipment):
+		self.pipeline.add(self.cam1.get_bin())
 		
 	def swap(self):
-		# Test hotswap of v4l2src and videotestsrc
-		pass
+		self.backup_source = Gst.ElementFactory.make('videotestsrc',None)
+		self.pipeline.add(self.backup_source)
+		self.pipeline.set_state(Gst.State.NULL)
+
+		self.src.unlink(self.caps_filter)
+		self.backup_source.link(self.caps_filter)
+		self.pipeline.set_state(Gst.State.PLAYING)
+		self.assign_drawing_area()
 		
-	def assign_drawing_area(self, drawing_area):
-		print "DrawingArea ID: " + str(drawing_area.get_window().get_xid())
-		self.sink.set_window_handle(drawing_area.get_window().get_xid())
+	def assign_drawing_area(self, drawing_area=None):
+		if drawing_area:
+			self.drawing_area = drawing_area
+		
+		self.sink.set_window_handle(self.drawing_area.get_window().get_xid())	
+
+	def on_sync_message(self, bus, message):
+		structure = message.get_structure()
+		print structure
 
 	def on_bus_message(self, bus, message):
 		pass

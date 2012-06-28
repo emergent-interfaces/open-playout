@@ -11,16 +11,22 @@ indent_mode=2
 name=Open Playout
 base_path=/home/lsimons/open-playout/
 description=
+file_patterns=
 
 [long line marker]
 long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=173;Python;0;16;1;1;0;/home/lsimons/open-playout/main.py;0;4
-FILE_NAME_1=28;Python;0;16;1;1;0;/home/lsimons/open-playout/station.py;0;4
-FILE_NAME_2=195;Markdown;0;16;1;1;0;/home/lsimons/open-playout/README.md;0;4
+current_page=2
+FILE_NAME_0=369;Python;0;16;1;1;0;/home/lsimons/open-playout/main.py;0;4
+FILE_NAME_1=701;Python;0;16;1;1;0;/home/lsimons/open-playout/station.py;0;4
+FILE_NAME_2=385;Python;0;16;1;1;0;/home/lsimons/open-playout/camera.py;0;4
 
 [VTE]
 last_dir=/home/lsimons
+
+[build-menu]
+EX_00_LB=_Execute
+EX_00_CM=python "main.py"
+EX_00_WD=

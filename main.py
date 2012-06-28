@@ -22,6 +22,7 @@ class Main:
 		
 		self.video_window = Gtk.Window()
 		self.drawing_area = Gtk.DrawingArea()
+		self.drawing_area.set_size_request(640,480)
 		self.video_window.add(self.drawing_area)
 		self.drawing_area.show()
 		self.drawing_area.connect("realize", self.on_video_window_realize)
