@@ -22,7 +22,7 @@ class Station(object):
 		self.sink = Gst.ElementFactory.make('xvimagesink', None)
 		self.pipeline.add(self.sink)
 		
-		self.cam1.src().link(self.sink)
+		self.cam1.get_bin().link(self.sink)
 
 		self.bus = self.pipeline.get_bus()
 		self.bus.connect('message::eos', self.on_bus_eos)
