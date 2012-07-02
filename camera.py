@@ -36,3 +36,10 @@ class Camera(object):
 
 	def get_src(self):
 		return self.bin.get_static_pad('src')
+
+	def fall_back(self):
+		self.backup_source = Gst.ElementFactory.make('videotestsrc',None)
+		self.bin.add(self.backup_source)
+
+		self.src.unlink(self.caps_filter)
+		self.backup_source.link(self.caps_filter)

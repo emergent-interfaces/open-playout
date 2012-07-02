@@ -34,12 +34,8 @@ class Station(object):
 		self.pipeline.add(self.cam1.get_bin())
 		
 	def swap(self):
-		self.backup_source = Gst.ElementFactory.make('videotestsrc',None)
-		self.pipeline.add(self.backup_source)
 		self.pipeline.set_state(Gst.State.NULL)
-
-		self.src.unlink(self.caps_filter)
-		self.backup_source.link(self.caps_filter)
+		self.cam1.fall_back()
 		self.pipeline.set_state(Gst.State.PLAYING)
 		self.assign_drawing_area()
 		
