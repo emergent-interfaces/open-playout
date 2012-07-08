@@ -1,5 +1,6 @@
 import gi
 import sys
+import equipment
 
 try:
 	gi.require_version('Gst','1.0')
@@ -9,11 +10,10 @@ except ValueError:
 	
 from gi.repository import Gst
 	
-class Camera(object):
+class Camera(equipment.Equipment):
 	def __init__(self,name):
-		self.name = name
-		
-		self.bin = Gst.Bin.new('camera_bin')
+		equipment.Equipment.__init__(self, name)
+
 		self.src = Gst.ElementFactory.make('v4l2src', None)
 		self.caps_filter = Gst.ElementFactory.make('capsfilter', None)
 		self.text_overlay = Gst.ElementFactory.make('textoverlay', None)
@@ -47,12 +47,6 @@ class Camera(object):
 
 	def set_overlay_text(self,text):
 		self.text_overlay.set_property("text",text)
-
-	def get_bin(self):
-		return self.bin
-
-	def get_src(self):
-		return self.bin.get_static_pad('src')
 
 	def fall_back(self):
 		self.backup_source = Gst.ElementFactory.make('videotestsrc',None)
