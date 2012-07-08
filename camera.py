@@ -16,13 +16,18 @@ class Camera(object):
 		self.bin = Gst.Bin.new('camera_bin')
 		self.src = Gst.ElementFactory.make('v4l2src', None)
 		self.caps_filter = Gst.ElementFactory.make('capsfilter', None)
+		self.text_overlay = Gst.ElementFactory.make('textoverlay', None)
 		
 		self.bin.add(self.src)
 		self.bin.add(self.caps_filter)
+		self.bin.add(self.text_overlay)
+
+		self.configure_textoverlay()
 		
 		self.src.link(self.caps_filter)
+		self.caps_filter.link(self.text_overlay)
 		
-		pad = self.caps_filter.get_static_pad("src")
+		pad = self.text_overlay.get_static_pad("src")
 		ghost_pad = Gst.GhostPad.new("src",pad)
 		self.bin.add_pad(ghost_pad)
 		
@@ -30,6 +35,13 @@ class Camera(object):
 	  	Gst.caps_from_string("video/x-raw, width=640, height=480"))
 
 		self.active = True
+		self.device = self.src.get_property('device')
+	
+	def configure_textoverlay(self):
+		self.text_overlay.set_property("shaded-background", True)
+
+	def set_overlay_text(self,text):
+		self.text_overlay.set_property("text",text)
 
 	def get_bin(self):
 		return self.bin
@@ -47,6 +59,9 @@ class Camera(object):
 		del self.src
 		self.backup_source.link(self.caps_filter)
 
+		overlay_text = self.name + '\n' + 'Lost source ' + self.device
+		self.set_overlay_text(overlay_text)
+
 		self.backup_source.set_state(Gst.State.PLAYING)
 
 		self.active = False
@@ -61,6 +76,10 @@ class Camera(object):
 		del self.backup_source
 		self.src.link(self.caps_filter)
 
+		self.set_overlay_text('')
+
 		self.src.set_state(Gst.State.PLAYING)
 
 		self.active = True
+		self.device = self.src.get_property('device')
+
