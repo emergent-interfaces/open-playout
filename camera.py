@@ -23,13 +23,13 @@ class Camera(object):
 		self.src.link(self.caps_filter)
 		
 		pad = self.caps_filter.get_static_pad("src")
-		print pad
 		ghost_pad = Gst.GhostPad.new("src",pad)
-		print ghost_pad
 		self.bin.add_pad(ghost_pad)
 		
 		self.caps_filter.set_property('caps',
 	  	Gst.caps_from_string("video/x-raw, width=640, height=480"))
+
+		self.active = True
 
 	def get_bin(self):
 		return self.bin
@@ -41,5 +41,26 @@ class Camera(object):
 		self.backup_source = Gst.ElementFactory.make('videotestsrc',None)
 		self.bin.add(self.backup_source)
 
+		self.src.set_state(Gst.State.NULL)
+
 		self.src.unlink(self.caps_filter)
+		del self.src
 		self.backup_source.link(self.caps_filter)
+
+		self.backup_source.set_state(Gst.State.PLAYING)
+
+		self.active = False
+
+	def stand_up(self):
+		self.src = Gst.ElementFactory.make('v4l2src', None)
+		self.bin.add(self.src)
+
+		self.backup_source.set_state(Gst.State.NULL)
+
+		self.backup_source.unlink(self.caps_filter)
+		del self.backup_source
+		self.src.link(self.caps_filter)
+
+		self.src.set_state(Gst.State.PLAYING)
+
+		self.active = True

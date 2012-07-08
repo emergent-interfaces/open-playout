@@ -34,9 +34,11 @@ class Station(object):
 		self.pipeline.add(self.cam1.get_bin())
 		
 	def swap(self):
-		self.pipeline.set_state(Gst.State.NULL)
-		self.cam1.fall_back()
-		self.pipeline.set_state(Gst.State.PLAYING)
+		if self.cam1.active:
+			self.cam1.fall_back()
+		else:
+			self.cam1.stand_up()
+
 		self.assign_drawing_area()
 		
 	def assign_drawing_area(self, drawing_area=None):
