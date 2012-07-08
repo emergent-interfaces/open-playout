@@ -52,12 +52,19 @@ class Station(object):
 		print structure
 
 	def on_bus_message(self, bus, message):
-		pass
-		
+		print self.message_details(message)
+
 	def on_bus_eos(self, bus, message):
 		print "EOS Received"
-		print message
-		self.stop()
+		print self.message_details(message)
+		self.swap()
+		#self.stop()
+
+	def message_details(self,message):
+		text = "Message:"
+		text += " " + message.src.name
+		text += " " + str(message.type)
+		return text
 	
 	def run(self):
 		self.pipeline.set_state(Gst.State.PLAYING)

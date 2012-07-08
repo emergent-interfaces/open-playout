@@ -30,12 +30,17 @@ class Camera(object):
 		pad = self.text_overlay.get_static_pad("src")
 		ghost_pad = Gst.GhostPad.new("src",pad)
 		self.bin.add_pad(ghost_pad)
+		ghost_pad.add_probe(Gst.PadProbeType.EVENT_DOWNSTREAM, self.probe_callback, None)
 		
 		self.caps_filter.set_property('caps',
 	  	Gst.caps_from_string("video/x-raw, width=640, height=480"))
 
 		self.active = True
 		self.device = self.src.get_property('device')
+
+	def probe_callback(self, pad, info, user_data):
+		print "In probe callback "
+		return Gst.PadProbeReturn.PASS
 	
 	def configure_textoverlay(self):
 		self.text_overlay.set_property("shaded-background", True)
