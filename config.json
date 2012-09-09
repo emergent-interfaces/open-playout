@@ -1,0 +1,27 @@
+{
+	"displays": [
+		{
+			"name": "primary",
+			"location": "windowed",
+			"monitor": "program_monitor"
+		}
+	],
+
+	"devices": [
+		{
+			"type": "camera",
+			"name": "cam1"
+		},
+		{
+			"type": "monitor",
+			"name": "program_monitor"
+		}
+	],
+
+	"patches": [
+		{
+			"src": "cam1.src",
+			"sink": "program_monitor.sink"
+		}
+	]
+}

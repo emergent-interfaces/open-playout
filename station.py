@@ -1,6 +1,8 @@
 import gi
 import sys
 import camera
+import monitor
+import patch
 
 try:
 	gi.require_version('Gst','1.0')
@@ -12,26 +14,59 @@ from gi.repository import Gst, GstVideo
 print Gst.version_string()
 
 class Station(object):
-	def __init__(self):
+	def __init__(self, config):
+		self.config = config
+		self.devices = []
+		self.patches = []
 		Gst.init(None)
-				
+
 		self.pipeline = Gst.Pipeline()
-		self.cam1 = camera.Camera('cam1')
-		self.add_equipment(self.cam1)
+
+		for device_details in self.config["devices"]:
+			device = self.device_factory(device_details)
+			if device: self.add_device(device)
 		
-		self.sink = Gst.ElementFactory.make('xvimagesink', None)
-		self.pipeline.add(self.sink)
-		
-		self.cam1.get_bin().link(self.sink)
+		for patch_details in self.config["patches"]:
+			patch = self.patch_factory(patch_details)
+			if patch: self.add_patch(patch)
+
+		self.find_device_by_name("cam1").get_bin().link(self.find_device_by_name("program_monitor").get_bin())
 
 		self.bus = self.pipeline.get_bus()
 		self.bus.connect('message::eos', self.on_bus_eos)
-		self.bus.connect('sync-message::element', self.on_sync_message)
-		self.bus.connect('message', self.on_bus_message)
+		#self.bus.connect('sync-message::element', self.on_sync_message)
+		#self.bus.connect('message', self.on_bus_message)
 		self.bus.add_signal_watch()
+
+	def device_factory(self,details):
+		if details["type"] == "camera":
+			return camera.Camera(details["name"])
+		if details["type"] == "monitor":
+			return monitor.Monitor(details["name"])
+
+		return None
+
+	def patch_factory(self,details):
+		src_device_name, separator, src_port_name = details["src"].partition('.')
+		sink_device_name, separator, sink_port_name = details["sink"].partition('.')
+
+		src_port = self.find_device_by_name(src_device_name).get_port(src_port_name)
+		sink_port = self.find_device_by_name(sink_device_name).get_port(sink_port_name)
+
+		return patch.Patch(src_port,sink_port)
 	
-	def add_equipment(self, equipment):
-		self.pipeline.add(self.cam1.get_bin())
+	def add_device(self, device):
+		self.pipeline.add(device.get_bin())
+		self.devices.append(device)
+
+	def add_patch(self, patch):
+		self.patches.append(patch)
+
+	def find_device_by_name(self, name):
+		for device in self.devices:
+			if device.name == name: return device
+
+		return None
 		
 	def swap(self):
 		if self.cam1.active:
@@ -41,11 +76,9 @@ class Station(object):
 
 		self.assign_drawing_area()
 		
-	def assign_drawing_area(self, drawing_area=None):
-		if drawing_area:
-			self.drawing_area = drawing_area
-		
-		self.sink.set_window_handle(self.drawing_area.get_window().get_xid())	
+	def assign_drawing_area(self, drawing_area, monitor_name):
+		sink = self.find_device_by_name(monitor_name).get_sink()
+		sink.set_window_handle(drawing_area.get_window().get_xid())	
 
 	def on_sync_message(self, bus, message):
 		structure = message.get_structure()

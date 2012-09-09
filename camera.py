@@ -1,6 +1,6 @@
 import gi
 import sys
-import equipment
+import device
 
 try:
 	gi.require_version('Gst','1.0')
@@ -10,9 +10,9 @@ except ValueError:
 	
 from gi.repository import Gst
 	
-class Camera(equipment.Equipment):
+class Camera(device.Device):
 	def __init__(self,name):
-		equipment.Equipment.__init__(self, name)
+		device.Device.__init__(self, name)
 
 		self.src = Gst.ElementFactory.make('v4l2src', None)
 		self.caps_filter = Gst.ElementFactory.make('capsfilter', None)
