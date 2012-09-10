@@ -9,8 +9,8 @@
 
 	"devices": [
 		{
-			"type": "camera",
-			"name": "cam1"
+			"type": "deck",
+			"name": "deck1"
 		},
 		{
 			"type": "monitor",
@@ -20,7 +20,7 @@
 
 	"patches": [
 		{
-			"src": "cam1.src",
+			"src": "deck1.src",
 			"sink": "program_monitor.sink"
 		}
 	]

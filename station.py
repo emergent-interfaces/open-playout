@@ -3,6 +3,7 @@ import sys
 import camera
 import monitor
 import patch
+import deck
 
 try:
 	gi.require_version('Gst','1.0')
@@ -30,8 +31,6 @@ class Station(object):
 			patch = self.patch_factory(patch_details)
 			if patch: self.add_patch(patch)
 
-		self.find_device_by_name("cam1").get_bin().link(self.find_device_by_name("program_monitor").get_bin())
-
 		self.bus = self.pipeline.get_bus()
 		self.bus.connect('message::eos', self.on_bus_eos)
 		#self.bus.connect('sync-message::element', self.on_sync_message)
@@ -41,8 +40,10 @@ class Station(object):
 	def device_factory(self,details):
 		if details["type"] == "camera":
 			return camera.Camera(details["name"])
-		if details["type"] == "monitor":
+		elif details["type"] == "monitor":
 			return monitor.Monitor(details["name"])
+		elif details["type"] == "deck":
+			return deck.Deck(details["name"])
 
 		return None
 
