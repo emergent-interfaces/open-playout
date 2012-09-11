@@ -41,7 +41,9 @@ class Station(object):
 		if details["type"] == "camera":
 			return camera.Camera(details["name"])
 		elif details["type"] == "monitor":
-			return monitor.Monitor(details["name"])
+			return monitor.Monitor(details["name"],
+				                   details["size"],
+				                   details["location"])
 		elif details["type"] == "deck":
 			return deck.Deck(details["name"])
 
@@ -68,6 +70,13 @@ class Station(object):
 			if device.name == name: return device
 
 		return None
+
+	def find_all_monitors(self):
+		monitors = []
+		for device in self.devices:
+			if isinstance(device,monitor.Monitor): monitors.append(device)
+
+		return monitors
 		
 	def swap(self):
 		if self.cam1.active:

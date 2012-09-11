@@ -11,8 +11,10 @@ except ValueError:
 from gi.repository import Gst
 
 class Monitor(device.Device):
-	def __init__(self,name):
+	def __init__(self, name, size, location):
 		device.Device.__init__(self, name)
+		self.size = size
+		self.location = location
 
 		self.sink = Gst.ElementFactory.make('xvimagesink', None)
 		self.bin.add(self.sink)

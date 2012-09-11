@@ -15,7 +15,8 @@
 		{
 			"type": "monitor",
 			"name": "program_monitor",
-			"location": "windowed"
+			"size": "windowed",
+			"location": "auto"
 		}
 	],
 
