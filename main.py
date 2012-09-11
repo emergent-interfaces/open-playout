@@ -24,19 +24,20 @@ class Main:
 		
 		self.station = station.Station(self.config)
 		
+		# Create displays for all monitors
 		self.displays = {}
-		for display_details in self.config["displays"]:
-			self.create_display(display_details["name"],
-								display_details["monitor"],
-								display_details["location"])
+		for device_details in self.config["devices"]:
+			if device_details["type"] == "monitor":
+				self.create_display(device_details["name"],
+									device_details["location"])
 
-	def create_display(self,name,monitor,location):
+	def create_display(self,name,location):
 		display_window = Gtk.Window()
 		self.displays[name] = display_window
 
 		drawing_area = Gtk.DrawingArea()
 		drawing_area.set_size_request(640,480)
-		drawing_area.connect("realize", self.on_video_window_realize, monitor)
+		drawing_area.connect("realize", self.on_video_window_realize, name)
 		
 		display_window.add(drawing_area)
 		drawing_area.show()
