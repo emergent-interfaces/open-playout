@@ -1,9 +1,9 @@
 import gi
 import sys
-import camera
-import monitor
-import patch
-import deck
+from camera import Camera
+from monitor import Monitor
+from patch import Patch
+from deck import Deck
 
 try:
     gi.require_version('Gst', '1.0')
@@ -42,13 +42,13 @@ class Station(object):
 
     def device_factory(self, details):
         if details["type"] == "camera":
-            return camera.Camera(details["name"])
+            return Camera(details["name"])
         elif details["type"] == "monitor":
-            return monitor.Monitor(details["name"],
+            return Monitor(details["name"],
                                    details["size"],
                                    details["location"])
         elif details["type"] == "deck":
-            return deck.Deck(details["name"])
+            return Deck(details["name"])
 
         return None
 
@@ -59,7 +59,7 @@ class Station(object):
         src_port = self.find_device_by_name(src_device_name).get_port(src_port_name)
         sink_port = self.find_device_by_name(sink_device_name).get_port(sink_port_name)
 
-        return patch.Patch(src_port, sink_port)
+        return Patch(src_port, sink_port)
 
     def add_device(self, device):
         self.pipeline.add(device.get_bin())
@@ -78,7 +78,7 @@ class Station(object):
     def find_all_monitors(self):
         monitors = []
         for device in self.devices:
-            if isinstance(device, monitor.Monitor):
+            if isinstance(device, Monitor):
                 monitors.append(device)
 
         return monitors

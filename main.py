@@ -5,7 +5,7 @@ import gi
 import sys
 import station
 import json
-import monitor
+from monitor import Monitor
 
 from gi.repository import GObject, Gtk, Gdk, GdkX11
 
@@ -28,8 +28,8 @@ class Main:
 
         # Create displays for all monitors
         self.displays = {}
-        for m in self.station.find_all_monitors():
-            self.create_display(m.name, m.size, m.location)
+        for monitor in self.station.find_all_monitors():
+            self.create_display(monitor.name, monitor.size, monitor.location)
 
     def create_display(self, name, size, location):
         display_window = Gtk.Window()
