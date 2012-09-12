@@ -5,6 +5,8 @@ import gi
 import sys
 import station
 import json
+
+import config_parse
 from monitor import Monitor
 
 from gi.repository import GObject, Gtk, Gdk, GdkX11
@@ -45,24 +47,13 @@ class Main:
         if size == "full":
             display_window.fullscreen()
         else:
-            width, height = self.extract_axb(size, 320, 240)
+            width, height = config_parse.extract_axb(size, 320, 240)
             drawing_area.set_size_request(width, height)
 
-        left, top = self.extract_axb(location)
+        left, top = config_parse.extract_axb(location)
         if left != None and top != None:
             print "here"
             display_window.move(left, top)
-
-    def extract_axb(self, text, default_a=None, default_b=None):
-        a, delimiter, b = text.partition('x')
-        if b != "":
-            a = int(a)
-            b = int(b)
-        else:
-            a = default_a
-            b = default_b
-
-        return a, b
 
     def on_video_window_realize(self, drawing_area, monitor):
         self.station.assign_drawing_area(drawing_area, monitor)
