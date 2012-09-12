@@ -29,21 +29,40 @@ class Main:
         # Create displays for all monitors
         self.displays = {}
         for m in self.station.find_all_monitors():
-            self.create_display(m.name,
-                                m.size,
-                                m.location)
+            self.create_display(m.name, m.size, m.location)
 
     def create_display(self, name, size, location):
         display_window = Gtk.Window()
         self.displays[name] = display_window
 
         drawing_area = Gtk.DrawingArea()
-        drawing_area.set_size_request(640, 480)
         drawing_area.connect("realize", self.on_video_window_realize, name)
 
         display_window.add(drawing_area)
         drawing_area.show()
         display_window.show_all()
+
+        if size == "full":
+            display_window.fullscreen()
+        else:
+            width, height = self.extract_axb(size, 320, 240)
+            drawing_area.set_size_request(width, height)
+
+        left, top = self.extract_axb(location)
+        if left != None and top != None:
+            print "here"
+            display_window.move(left, top)
+
+    def extract_axb(self, text, default_a=None, default_b=None):
+        a, delimiter, b = text.partition('x')
+        if b != "":
+            a = int(a)
+            b = int(b)
+        else:
+            a = default_a
+            b = default_b
+
+        return a, b
 
     def on_video_window_realize(self, drawing_area, monitor):
         self.station.assign_drawing_area(drawing_area, monitor)

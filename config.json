@@ -1,12 +1,4 @@
 {
-	"displays": [
-		{
-			"name": "primary",
-			"location": "windowed",
-			"monitor": "program_monitor"
-		}
-	],
-
 	"devices": [
 		{
 			"type": "deck",
@@ -15,7 +7,7 @@
 		{
 			"type": "monitor",
 			"name": "program_monitor",
-			"size": "windowed",
+			"size": "640x480",
 			"location": "auto"
 		}
 	],
