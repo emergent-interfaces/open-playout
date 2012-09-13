@@ -4,6 +4,7 @@ from camera import Camera
 from monitor import Monitor
 from patch import Patch
 from deck import Deck
+from video_test_gen import VideoTestGen
 
 try:
     gi.require_version('Gst', '1.0')
@@ -49,6 +50,11 @@ class Station(object):
                                    details["location"])
         elif details["type"] == "deck":
             return Deck(details["name"])
+        elif details["type"] == "video_test_gen":
+            if "pattern" in details:
+                return VideoTestGen(details["name"], int(details["pattern"]))
+            else:
+                return VideoTestGen(details["name"])
 
         return None
 

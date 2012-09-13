@@ -62,6 +62,12 @@ Deck
 * type:     "deck"
 * name
 
+VideoTestGen
+------------
+* type:     "video_test_gen"
+* name
+* pattern:  Integer corresponding to [GstVideoTestSrcPattern](http://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-videotestsrc.html#GstVideoTestSrcPattern).  Defaults to 0.
+
 Switcher
 --------
 Not started

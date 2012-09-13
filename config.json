@@ -1,8 +1,9 @@
 {
 	"devices": [
 		{
-			"type": "deck",
-			"name": "deck1"
+			"type": "video_test_gen",
+			"name": "gen1",
+			"pattern": 0
 		},
 		{
 			"type": "monitor",
@@ -14,7 +15,7 @@
 
 	"patches": [
 		{
-			"src": "deck1.src",
+			"src": "gen1.src",
 			"sink": "program_monitor.sink"
 		}
 	]
