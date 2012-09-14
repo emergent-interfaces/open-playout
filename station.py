@@ -1,5 +1,6 @@
 import gi
 import sys
+import os
 from camera import Camera
 from monitor import Monitor
 from patch import Patch
@@ -17,7 +18,7 @@ print Gst.version_string()
 
 
 class Station(object):
-    def __init__(self, config):
+    def __init__(self, config, args):
         self.config = config
         self.devices = []
         self.patches = []
@@ -40,6 +41,13 @@ class Station(object):
         #self.bus.connect('sync-message::element', self.on_sync_message)
         #self.bus.connect('message', self.on_bus_message)
         self.bus.add_signal_watch()
+
+        if args.graph:
+            Gst.debug_bin_to_dot_file(self.pipeline, Gst.DebugGraphDetails.ALL, "pipeline")
+            try:
+                os.system("dot -Tpng -o /tmp/pipeline.png /tmp/pipeline.dot")
+            except Exception, e:
+                print e
 
     def device_factory(self, details):
         if details["type"] == "camera":
