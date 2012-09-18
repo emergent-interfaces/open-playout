@@ -1,11 +1,12 @@
 import gi
 import sys
 import os
-from camera import Camera
-from monitor import Monitor
+from devices.camera import Camera
+from devices.monitor import Monitor
+from devices.deck import Deck
+from devices.switcher import Switcher
+from devices.video_test_gen import VideoTestGen
 from patch import Patch
-from deck import Deck
-from video_test_gen import VideoTestGen
 
 try:
     gi.require_version('Gst', '1.0')
@@ -50,19 +51,23 @@ class Station(object):
                 print e
 
     def device_factory(self, details):
-        if details["type"] == "camera":
+        device_type = details["type"]
+
+        if device_type == "camera":
             return Camera(details["name"])
-        elif details["type"] == "monitor":
+        elif device_type == "monitor":
             return Monitor(details["name"],
                                    details["size"],
                                    details["location"])
-        elif details["type"] == "deck":
+        elif device_type == "deck":
             return Deck(details["name"])
-        elif details["type"] == "video_test_gen":
+        elif device_type == "video_test_gen":
             if "pattern" in details:
                 return VideoTestGen(details["name"], int(details["pattern"]))
             else:
                 return VideoTestGen(details["name"])
+        elif device_type == "switcher":
+            return Switcher(details["name"], details["inputs"])
 
         return None
 

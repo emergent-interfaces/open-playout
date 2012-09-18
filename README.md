@@ -70,7 +70,9 @@ VideoTestGen
 
 Switcher
 --------
-Not started
+* type:     "switcher"
+* name
+* inputs:   Number of inputs to switch between
 
 Mixer
 -----

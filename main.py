@@ -9,7 +9,7 @@ import argparse
 import os
 
 import config_parse
-from monitor import Monitor
+from devices.monitor import Monitor
 
 from gi.repository import GObject, Gtk, Gdk, GdkX11
 
@@ -47,6 +47,7 @@ class Main:
     def create_display(self, name, size, location):
         display_window = Gtk.Window()
         self.displays[name] = display_window
+        display_window.set_title(name)
 
         drawing_area = Gtk.DrawingArea()
         drawing_area.connect("realize", self.on_video_window_realize, name)
