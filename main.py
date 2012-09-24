@@ -10,6 +10,7 @@ import os
 
 import config_parse
 from devices.monitor import Monitor
+from simple_controller import SimpleController
 
 from gi.repository import GObject, Gtk, Gdk, GdkX11
 
@@ -30,14 +31,10 @@ class Main:
         config_text = open('config.json').read()
         self.config = json.loads(config_text)
 
-        win = Gtk.Window()
-        button = Gtk.Button(label="Do Something")
-        win.add(button)
-        win.show_all()
-
-        win.connect("delete-event", self.on_quit)
-
         self.station = station.Station(self.config, args)
+
+        controller = SimpleController(self.station)
+        controller.connect("delete-event", self.on_quit)
 
         # Create displays for all monitors
         self.displays = {}
@@ -64,7 +61,6 @@ class Main:
 
         left, top = config_parse.extract_axb(location)
         if left != None and top != None:
-            print "here"
             display_window.move(left, top)
 
     def on_video_window_realize(self, drawing_area, monitor):

@@ -19,13 +19,13 @@
 			"type": "monitor",
 			"name": "program_monitor",
 			"size": "640x480",
-			"location": "auto"
+			"location": "0x100"
 		},
 		{
 			"type": "monitor",
 			"name": "preview_monitor",
 			"size": "640x480",
-			"location": "auto"
+			"location": "640x100"
 		}
 	],
 

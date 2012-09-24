@@ -75,26 +75,42 @@ class Switcher(Device):
             self.set_bus_input("program", 0)
             self.set_bus_input("preview", 0)
 
+        self.add_action("take", self.take, "Swap program and preview or set program")
+        self.add_action("preview", self.preview, "Set preview")
+
     def set_bus_input(self, bus, input_id):
-        hi_pad_name = "sink_" + str(input_id)
+        print "Setting bus input: " + bus + ", " + str(input_id)
+
+        high_pad_name = "sink_" + str(input_id)
 
         if bus == "program":
             mixer = self.prog_mixer
             low_pad_name = "sink_" + str(self.preview_active_id)
+            prev_high_pad_name = "sink_" + str(self.program_active_id)
         elif bus == "preview":
             mixer = self.prev_mixer
             low_pad_name = "sink_" + str(self.program_active_id)
+            prev_high_pad_name = "sink_" + str(self.preview_active_id)
         else:
             return
 
         # Arrange input z-orders
-        pad = mixer.get_static_pad(hi_pad_name)
+        pad = mixer.get_static_pad(high_pad_name)
         pad.set_property('zorder', 2)
         pad.set_property('alpha', self.opacity)
 
         pad = mixer.get_static_pad(low_pad_name)
         pad.set_property('zorder', 1)
         pad.set_property('alpha', 1.0)
+
+        if prev_high_pad_name != high_pad_name:
+            pad = mixer.get_static_pad(prev_high_pad_name)
+            pad.set_property('zorder', 1)
+            pad.set_property('alpha', 1.0)
+
+        print "High pad: " + high_pad_name
+        print "Low pad: " + low_pad_name
+        print "Opacity: " + str(self.opacity)
 
         # Iterate over all sink pads and set below
         it = mixer.iterate_sink_pads()
@@ -104,7 +120,7 @@ class Switcher(Device):
             if status != Gst.IteratorResult.OK:
                 break
 
-            if (pad.get_name() != hi_pad_name and pad.get_name() != low_pad_name):
+            if (pad.get_name() != high_pad_name and pad.get_name() != low_pad_name):
                 pad.set_property("zorder", 0)
                 pad.set_property("alpha", 1.0)
 
@@ -114,12 +130,18 @@ class Switcher(Device):
         elif bus == "preview":
             self.preview_active_id = input_id
 
-    def take(self):
-        current_prog_id = self.program_active_id
-        current_prev_id = self.preview_active_id
+    def take(self, program_id=None):
+        if not program_id:
+            current_prog_id = self.program_active_id
+            current_prev_id = self.preview_active_id
 
-        self.set_bus_input("program", current_prev_id)
-        self.set_bus_input("preview", current_prog_id)
+            self.set_bus_input("program", current_prev_id)
+            self.set_bus_input("preview", current_prog_id)
+        else:
+            self.set_bus_input("program", program_id)
+
+    def preview(self, preview_id):
+        self.set_bus_input("preview", preview_id)
 
     def set_opacity(self, opacity):
         # Update program mixer program input
