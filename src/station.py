@@ -72,8 +72,8 @@ class Station(object):
         return None
 
     def patch_factory(self, details):
-        src_device_name, separator, src_port_name = details["src"].partition('.')
-        sink_device_name, separator, sink_port_name = details["sink"].partition('.')
+        src_device_name, separator, src_port_name = details[0].partition('.')
+        sink_device_name, separator, sink_port_name = details[1].partition('.')
 
         src_port = self.find_device_by_name(src_device_name).get_port(src_port_name)
         sink_port = self.find_device_by_name(sink_device_name).get_port(sink_port_name)

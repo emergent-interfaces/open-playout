@@ -30,21 +30,9 @@
 	],
 
 	"patches": [
-		{
-			"src": "gen1.src",
-			"sink": "switcher.in1"
-		},
-		{
-			"src": "gen2.src",
-			"sink": "switcher.in2"
-		},
-		{
-			"src": "switcher.prog_out",
-			"sink": "program_monitor.sink"
-		},
-		{
-			"src": "switcher.prev_out",
-			"sink": "preview_monitor.sink"
-		}
+		["gen1.src", "switcher.in1"],
+		["gen2.src", "switcher.in2"],
+		["switcher.prog_out", "program_monitor.sink"],
+		["switcher.prev_out", "preview_monitor.sink"]
 	]
 }
