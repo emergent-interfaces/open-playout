@@ -19,6 +19,12 @@ class VideoTestGen(Device):
         self.src.set_property('pattern', pattern)
         self.bin.add(self.src)
 
-        pad = self.src.get_static_pad("src")
+        self.text_overlay = Gst.ElementFactory.make('textoverlay', None)
+        self.bin.add(self.text_overlay)
+        self.text_overlay.set_property("text", self.name)
+        self.text_overlay.set_property("shaded-background", True)
+
+        self.src.link(self.text_overlay)
+        pad = self.text_overlay.get_static_pad("src")
         ghost_pad = Gst.GhostPad.new("src", pad)
         self.bin.add_pad(ghost_pad)
