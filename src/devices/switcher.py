@@ -103,20 +103,11 @@ class Switcher(Device):
         pad.set_property('zorder', 1)
         pad.set_property('alpha', 1.0)
 
-        if prev_high_pad_name != high_pad_name:
-            pad = mixer.get_static_pad(prev_high_pad_name)
-            pad.set_property('zorder', 1)
-            pad.set_property('alpha', 1.0)
-
-        print "High pad: " + high_pad_name
-        print "Low pad: " + low_pad_name
-        print "Opacity: " + str(self.opacity)
-
         # Iterate over all sink pads and set below
         it = mixer.iterate_sink_pads()
 
         while True:
-            pad, status = it.next()
+            status, pad = it.next()
             if status != Gst.IteratorResult.OK:
                 break
 
@@ -129,6 +120,18 @@ class Switcher(Device):
             self.program_active_id = input_id
         elif bus == "preview":
             self.preview_active_id = input_id
+
+        self.debug_mixer(mixer)
+
+    def debug_mixer(self, mixer):
+        it = mixer.iterate_sink_pads()
+
+        while True:
+            status, pad = it.next()
+            if status != Gst.IteratorResult.OK:
+                break
+
+            print "Pad:", pad.get_name(), "(zorder: " + str(pad.get_property("zorder")) + ")"
 
     def take(self, program_id=None):
         if not program_id:

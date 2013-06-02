@@ -11,9 +11,14 @@
 			"pattern": 1
 		},
 		{
+			"type": "video_test_gen",
+			"name": "gen3",
+			"pattern": 2
+		},
+		{
 			"type": "switcher",
 			"name": "switcher",
-			"inputs": 2
+			"inputs": 3
 		},
 		{
 			"type": "monitor",
@@ -32,6 +37,7 @@
 	"patches": [
 		["gen1.src", "switcher.in1"],
 		["gen2.src", "switcher.in2"],
+		["gen3.src", "switcher.in3"],
 		["switcher.prog_out", "program_monitor.sink"],
 		["switcher.prev_out", "preview_monitor.sink"]
 	]

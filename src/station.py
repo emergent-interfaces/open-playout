@@ -23,6 +23,8 @@ class Station(object):
         self.config = config
         self.devices = []
         self.patches = []
+
+        os.environ["GST_DEBUG"] = "3"
         Gst.init(None)
 
         self.pipeline = Gst.Pipeline()
