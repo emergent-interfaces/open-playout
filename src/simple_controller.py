@@ -67,3 +67,7 @@ class SimpleController(Gtk.Window):
         else:
             for device in self.station.devices:
                 device.do_action(action, args)
+
+        if action == 'exit':
+            self.station.stop()
+            Gtk.main_quit()
