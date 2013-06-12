@@ -75,4 +75,5 @@ class Main:
         Gtk.main_quit()
 
 if __name__ == "__main__":
-    Main().run()
+    main = Main()
+    main.run()

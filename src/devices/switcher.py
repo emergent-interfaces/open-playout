@@ -122,7 +122,7 @@ class Switcher(Device):
 
         self.set_opacity(self.opacity)
 
-        self.debug_mixer(mixer)
+        #self.debug_mixer(mixer)
 
     def debug_mixer(self, mixer):
         it = mixer.iterate_sink_pads()

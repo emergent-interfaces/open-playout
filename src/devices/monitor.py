@@ -17,10 +17,15 @@ class Monitor(device.Device):
         self.size = size
         self.location = location
 
+        self.convert = Gst.ElementFactory.make('videoconvert', None)
+        self.bin.add(self.convert)
+
         self.sink = Gst.ElementFactory.make('xvimagesink', None)
         self.bin.add(self.sink)
 
-        pad = self.sink.get_static_pad("sink")
+        self.convert.link(self.sink)
+
+        pad = self.convert.get_static_pad("sink")
         ghost_pad = Gst.GhostPad.new("sink", pad)
         self.bin.add_pad(ghost_pad)
 
