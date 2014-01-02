@@ -20,7 +20,7 @@ class Monitor(device.Device):
         self.convert = Gst.ElementFactory.make('videoconvert', None)
         self.bin.add(self.convert)
 
-        self.sink = Gst.ElementFactory.make('xvimagesink', None)
+        self.sink = Gst.ElementFactory.make('ximagesink', None)
         self.bin.add(self.sink)
 
         self.convert.link(self.sink)
