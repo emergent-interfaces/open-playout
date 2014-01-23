@@ -26,7 +26,7 @@ class Monitor(Device):
         self.sink = Gst.ElementFactory.make('xvimagesink', None)
         self.bin.add(self.sink)
 
-        caps = Gst.caps_from_string('video/x-raw, width=320, height=240')
+        caps = Gst.caps_from_string('video/x-raw, format=I420, width=320, height=240')
         self.convert.link_filtered(self.scale, caps)
         self.scale.link(self.sink)
 

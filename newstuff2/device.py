@@ -26,10 +26,13 @@ class Device(object):
         intervideosink = Gst.ElementFactory.make('intervideosink', None)
         self.bin.add(intervideosink)
 
-        device.link(intervideosink)
+        print device.link(intervideosink)
 
     def get_bin(self):
         return self.bin
 
-    def start_playing(self):
+    def set_playing(self):
         self.bin.set_state(Gst.State.PLAYING)
+
+    def set_null(self):
+        self.bin.set_state(Gst.State.NULL)

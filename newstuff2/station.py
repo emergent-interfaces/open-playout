@@ -1,5 +1,6 @@
 import gi, os
 from monitor import Monitor
+from video_test_gen import VideoTestGen
 
 try:
     gi.require_version('Gst', '1.0')
@@ -47,29 +48,11 @@ class Station(object):
         convert.link(image_sink)
 
     def fix_connection(self):
-        src = Gst.ElementFactory.make('videotestsrc', None)
-        self.pipeline.add(src)
-
-        convert = Gst.ElementFactory.make('videoconvert', None)
-        self.pipeline.add(convert)
-
-        intervideosink = Gst.ElementFactory.make('intervideosink', None)
-        self.pipeline.add(intervideosink)
-
-        caps = Gst.caps_from_string("video/x-raw,format=AYUV,width=320,height=240")
-
-        print src.link(convert)
-        print convert.link(intervideosink)
-
-        src.set_state(Gst.State.PLAYING)
-        convert.set_state(Gst.State.PLAYING)
-        intervideosink.set_state(Gst.State.PLAYING)
-
-        self.intervideosink = intervideosink
+        videotestgen = VideoTestGen('vtg1')
+        self.add_device(videotestgen)
 
     def ruin_connection(self):
-        self.intervideosink.set_state(Gst.State.READY)
-        self.real_src.set_state(Gst.State.READY)
+        self.remove_device(self.find_device_by_name('vtg1'))
 
     def bring_it_back(self):
         self.intervideosink.set_state(Gst.State.PLAYING)
@@ -77,10 +60,17 @@ class Station(object):
 
     def add(self):
         monitor = Monitor('monitor1', (320,240), (0,0))
-        self.pipeline.add(monitor.get_bin())
-        monitor.start_playing()
-        self.devices.append(monitor)
-        
+        self.add_device(monitor)
+
+    def add_device(self, device):
+        self.pipeline.add(device.get_bin())
+        self.devices.append(device)
+        device.set_playing()
+
+    def remove_device(self, device):
+        device.set_null()
+        self.pipeline.remove(device.get_bin())
+        self.devices.remove(device)        
 
     def find_device_by_name(self, name):
         for device in self.devices:
