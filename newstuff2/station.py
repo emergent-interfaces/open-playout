@@ -21,8 +21,6 @@ class Station(object):
 
         self.devices = []
 
-        #self.build()
-
         if args.graph:
             self.graph_pipeline()
 
@@ -46,21 +44,6 @@ class Station(object):
 
         intervideosrc.link(convert)
         convert.link(image_sink)
-
-    def fix_connection(self):
-        videotestgen = VideoTestGen('vtg1')
-        self.add_device(videotestgen)
-
-    def ruin_connection(self):
-        self.remove_device(self.find_device_by_name('vtg1'))
-
-    def bring_it_back(self):
-        self.intervideosink.set_state(Gst.State.PLAYING)
-        self.real_src.set_state(Gst.State.PLAYING)
-
-    def add(self):
-        monitor = Monitor('monitor1', (320,240), (0,0))
-        self.add_device(monitor)
 
     def add_device(self, device):
         self.pipeline.add(device.get_bin())

@@ -2,9 +2,12 @@ import os, sys
 import argparse
 import gi
 from gi.repository import GObject, Gtk, Gdk, GdkX11
+import shlex
 from threading import Thread
 
 from station import Station
+from monitor import Monitor
+from video_test_gen import VideoTestGen
 
 os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
 os.putenv('GST_DEBUG_DUMP_DIR_DIR', '/tmp')
@@ -38,31 +41,44 @@ class Main:
     def terminal(self):
         print "Open-Playout Server"
 
+        self.test_cmd('add monitor m1')
+        self.test_cmd('add videotestgen v1')
+
         cmd = ""
         while cmd != "exit":
             cmd = raw_input('>>> ')
             self.parse(cmd)
 
-
     def parse(self, cmd):
-        if cmd == "fix":
-            self.station.fix_connection()
+        tokens = shlex.split(cmd)
+        first_token = tokens.pop(0)
 
-        if cmd == "ruin":
-            self.station.ruin_connection()
+        if first_token == "add":
+            device_type = tokens.pop(0)
+            device_name = tokens.pop(0)
 
-        if cmd == "back":
-            self.station.bring_it_back()
+            if device_type == 'videotestgen':
+                videotestgen = VideoTestGen(device_name)
+                self.station.add_device(videotestgen)
 
-        if cmd == "add":
-            self.station.add()
-            #self.create_display('monitor1', (640, 480), (0,0))
+            if device_type == 'monitor':
+                monitor = Monitor(device_name, (320,240), (0,0))
+                self.station.add_device(monitor)
+                #self.create_display('monitor1', (640, 480), (0,0))
 
-        if cmd == "graph":
+        if first_token == "remove":
+            device_name = tokens.pop(0)
+            self.station.remove_device(self.station.find_device_by_name(device_name))
+
+        if first_token == "graph":
             self.station.graph_pipeline()
 
-        if cmd == "exit":
+        if first_token == "exit":
             Gtk.main_quit()
+
+    def test_cmd(self, cmd):
+        print ">>>", cmd
+        self.parse(cmd)
 
     def create_display(self, name, size, location):
         display_window = Gtk.Window()
