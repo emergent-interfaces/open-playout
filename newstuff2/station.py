@@ -1,6 +1,7 @@
 import gi, os
 from monitor import Monitor
 from video_test_gen import VideoTestGen
+from link import Link
 
 try:
     gi.require_version('Gst', '1.0')
@@ -13,7 +14,7 @@ from gi.repository import Gst, GstVideo
 class Station(object):
     def __init__(self, config, args):
 
-        os.environ["GST_DEBUG"] = "3"
+        os.environ["GST_DEBUG"] = "2"
         Gst.init(None)
 
         self.pipeline = Gst.Pipeline()
@@ -53,7 +54,16 @@ class Station(object):
     def remove_device(self, device):
         device.set_null()
         self.pipeline.remove(device.get_bin())
-        self.devices.remove(device)        
+        self.devices.remove(device)
+
+    def link(self, device1_name, port1, device2_name, port2):
+        #device1 = self.find_device_by_name(device1_name)
+        #device2 = self.find_device_by_name(device2_name)
+
+        link = Link('link1', 'a', 'b')  
+        self.pipeline.add(link.get_bin())
+        link.set_playing()
+        pass
 
     def find_device_by_name(self, name):
         for device in self.devices:

@@ -31,7 +31,6 @@ class VideoTestGen(Device):
         self.bin.add(self.caps_filter)
 
         caps = Gst.caps_from_string("video/x-raw,format=I420,width=320,height=240")
-        print caps
         self.caps_filter.set_property('caps', caps)
 
         self.src.link(self.text_overlay)

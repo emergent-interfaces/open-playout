@@ -43,6 +43,7 @@ class Main:
 
         self.test_cmd('add monitor m1')
         self.test_cmd('add videotestgen v1')
+        #self.test_cmd('link v1.output m1.input')
 
         cmd = ""
         while cmd != "exit":
@@ -72,6 +73,11 @@ class Main:
 
         if first_token == "graph":
             self.station.graph_pipeline()
+
+        if first_token == "link":
+            device1, _, port1 = tokens.pop(0).partition('.')
+            device2, _, port2 = tokens.pop(0).partition('.')
+            self.station.link(device1, port1, device2, port2)
 
         if first_token == "exit":
             Gtk.main_quit()
