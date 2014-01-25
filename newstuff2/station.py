@@ -57,30 +57,24 @@ class Station(object):
         self.pipeline.remove(device.get_bin())
         self.devices.remove(device)
 
-    def link(self, name, port_1_uuid, port_2_uuid):
-        link = Link(name, port_1_uuid, port_2_uuid)
+    def link(self, name, port_1, port_2):
+        link = Link(name, port_1, port_2)
         self.pipeline.add(link.get_bin())
         link.set_playing()
         self.links.append(link)
 
-    def unlink(self, port_1_uuid, port_2_uuid):
-        link = self.find_link(port_1_uuid, port_2_uuid)
+    def unlink(self, port_1, port_2):
+        link = self.find_link(port_1, port_2)
         link.set_null()
         self.pipeline.remove(link.get_bin())
         self.links.remove(link)
 
-    def find_link(self, port_1_uuid, port_2_uuid):
+    def find_link(self, port_1, port_2):
         for link in self.links:
-            if link.port_1_uuid == port_1_uuid and link.port_2_uuid == port_2_uuid:
+            if link.port_1 == port_1 and link.port_2 == port_2:
                 return link
 
-        return None
-
-    def get_port_uuid(self, port_name):
-        device_name, _, port_name = port_name.partition('.')
-        device = self.find_device_by_name(device_name)
-        return device.get_port_uuid(port_name)
-        
+        return None        
 
     def find_device_by_name(self, name):
         for device in self.devices:

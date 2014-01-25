@@ -16,12 +16,12 @@ class Link(Device):
         Device.__init__(self, name)
 
         intervideosrc = Gst.ElementFactory.make('intervideosrc', None)
-        self.port_1_uuid = channel1
+        self.port_1 = channel1
         intervideosrc.set_property('channel', channel1)
         self.bin.add(intervideosrc)
 
         intervideosink = Gst.ElementFactory.make('intervideosink', None)
-        self.port_2_uuid = channel2
+        self.port_2 = channel2
         intervideosink.set_property('channel', channel2)
         self.bin.add(intervideosink)
 

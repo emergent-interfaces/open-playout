@@ -1,6 +1,5 @@
 import gi
 import sys
-import uuid
 
 try:
     gi.require_version('Gst', '1.0')
@@ -16,7 +15,7 @@ class Device(object):
     def __init__(self, name):
         self.name = name
         self.bin = Gst.Bin.new(self.name)
-        self.ports = {}
+        self.ports = []
 
     # todo Implement device_pad_name choice
     def add_input_port_on(self, device, device_pad_name="sink", port_name="in"):
@@ -24,9 +23,9 @@ class Device(object):
         intervideosrc = Gst.ElementFactory.make('intervideosrc', element_name)
         self.bin.add(intervideosrc)
 
-        channel_uuid = uuid.uuid1()
-        intervideosrc.set_property('channel', channel_uuid)
-        self.ports[port_name] = channel_uuid
+        channel = element_name
+        intervideosrc.set_property('channel', channel)
+        self.ports.append(channel)
 
         intervideosrc.link(device)
 
@@ -36,14 +35,11 @@ class Device(object):
         intervideosink = Gst.ElementFactory.make('intervideosink', element_name)
         self.bin.add(intervideosink)
 
-        channel_uuid = uuid.uuid1()
-        intervideosink.set_property('channel', channel_uuid)
-        self.ports[port_name] = channel_uuid
+        channel = element_name
+        intervideosink.set_property('channel', channel)
+        self.ports.append(channel)
 
         device.link(intervideosink)
-
-    def get_port_uuid(self, port_name):
-        return self.ports[port_name]
 
     def get_bin(self):
         return self.bin

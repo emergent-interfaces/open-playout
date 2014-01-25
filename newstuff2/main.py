@@ -91,16 +91,14 @@ class Main:
             self.station.graph_pipeline()
 
         if first_token == "link":
-            port1, port2 = tokens.pop(0), tokens.pop(0)
-            port_1_uuid = self.station.get_port_uuid(port1)
-            port_2_uuid = self.station.get_port_uuid(port2)
-            name = port1 + "-" + port2
-            self.station.link(name, port_1_uuid, port_2_uuid)
+            port_1, port_2 = tokens.pop(0), tokens.pop(0)
+            name = port_1 + "-" + port_2
+            self.station.link(name, port_1, port_2)
 
         if first_token == "unlink":
-            port_1_uuid = self.station.get_port_uuid(tokens.pop(0))
-            port_2_uuid = self.station.get_port_uuid(tokens.pop(0))
-            self.station.unlink(port_1_uuid, port_2_uuid)
+            port_1 = tokens.pop(0)
+            port_2 = tokens.pop(0)
+            self.station.unlink(port_1, port_2)
 
         if first_token == "exit":
             Gtk.main_quit()
