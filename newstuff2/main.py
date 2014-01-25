@@ -41,9 +41,9 @@ class Main:
     def terminal(self):
         print "Open-Playout Server"
 
-        self.test_cmd('add monitor m1')
+        #self.test_cmd('add monitor m1')
         self.test_cmd('add videotestgen v1')
-        #self.test_cmd('link v1.output m1.input')
+        #self.test_cmd('link v1.out m1.in')
 
         cmd = ""
         while cmd != "exit":
@@ -75,9 +75,14 @@ class Main:
             self.station.graph_pipeline()
 
         if first_token == "link":
-            device1, _, port1 = tokens.pop(0).partition('.')
-            device2, _, port2 = tokens.pop(0).partition('.')
-            self.station.link(device1, port1, device2, port2)
+            port_1_uuid = self.station.get_port_uuid(tokens.pop(0))
+            port_2_uuid = self.station.get_port_uuid(tokens.pop(0))
+            self.station.link(port_1_uuid, port_2_uuid)
+
+        if first_token == "unlink":
+            port_1_uuid = self.station.get_port_uuid(tokens.pop(0))
+            port_2_uuid = self.station.get_port_uuid(tokens.pop(0))
+            self.station.unlink(port_1_uuid, port_2_uuid)
 
         if first_token == "exit":
             Gtk.main_quit()

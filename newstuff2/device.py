@@ -21,9 +21,9 @@ class Device(object):
         intervideosrc = Gst.ElementFactory.make('intervideosrc', None)
         self.bin.add(intervideosrc)
 
-        channel_uuid = 'b'#uuid.uuid1()
+        channel_uuid = uuid.uuid1()
         intervideosrc.set_property('channel', channel_uuid)
-        self.ports[port_name] = intervideosrc
+        self.ports[port_name] = channel_uuid
 
         intervideosrc.link(device)
 
@@ -32,15 +32,14 @@ class Device(object):
         intervideosink = Gst.ElementFactory.make('intervideosink', None)
         self.bin.add(intervideosink)
 
-        channel_uuid = 'a'#uuid.uuid1()
+        channel_uuid = uuid.uuid1()
         intervideosink.set_property('channel', channel_uuid)
-        self.ports[port_name] = intervideosink
+        self.ports[port_name] = channel_uuid
 
         device.link(intervideosink)
 
-    def get_port_from_uuid(uuid):
-        pass
-
+    def get_port_uuid(self, port_name):
+        return self.ports[port_name]
 
     def get_bin(self):
         return self.bin

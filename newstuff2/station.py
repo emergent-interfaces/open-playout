@@ -21,6 +21,7 @@ class Station(object):
         self.bus = self.pipeline.get_bus()
 
         self.devices = []
+        self.links = []
 
         if args.graph:
             self.graph_pipeline()
@@ -56,14 +57,30 @@ class Station(object):
         self.pipeline.remove(device.get_bin())
         self.devices.remove(device)
 
-    def link(self, device1_name, port1, device2_name, port2):
-        #device1 = self.find_device_by_name(device1_name)
-        #device2 = self.find_device_by_name(device2_name)
-
-        link = Link('link1', 'a', 'b')  
+    def link(self, port_1_uuid, port_2_uuid):
+        link = Link('link1', port_1_uuid, port_2_uuid)  
         self.pipeline.add(link.get_bin())
         link.set_playing()
-        pass
+        self.links.append(link)
+
+    def unlink(self, port_1_uuid, port_2_uuid):
+        link = self.find_link(port_1_uuid, port_2_uuid)
+        link.set_null()
+        self.pipeline.remove(link.get_bin())
+        self.links.remove(link)
+
+    def find_link(self, port_1_uuid, port_2_uuid):
+        for link in self.links:
+            if link.port_1_uuid == port_1_uuid and link.port_2_uuid == port_2_uuid:
+                return link
+
+        return None
+
+    def get_port_uuid(self, port_name):
+        device_name, _, port_name = port_name.partition('.')
+        device = self.find_device_by_name(device_name)
+        return device.get_port_uuid(port_name)
+        
 
     def find_device_by_name(self, name):
         for device in self.devices:
