@@ -11,6 +11,8 @@ except ValueError:
 from gi.repository import Gst
 
 class Device(object):
+    DEFAULT_VIDEO_CAPS = "video/x-raw,format=I420,width=320,height=240"
+
     def __init__(self, name):
         self.name = name
         self.bin = Gst.Bin.new(self.name)

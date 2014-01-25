@@ -41,9 +41,9 @@ class Main:
     def terminal(self):
         print "Open-Playout Server"
 
-        #self.test_cmd('add monitor m1')
+        self.test_cmd('add monitor m1')
         self.test_cmd('add videotestgen v1')
-        #self.test_cmd('link v1.out m1.in')
+        self.test_cmd('link v1.out m1.in')
 
         cmd = ""
         while cmd != "exit":
