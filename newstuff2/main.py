@@ -8,6 +8,7 @@ from threading import Thread
 from station import Station
 from monitor import Monitor
 from camera import Camera
+from switcher import Switcher
 from video_test_gen import VideoTestGen
 
 os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
@@ -43,8 +44,13 @@ class Main:
         print "Open-Playout Server"
 
         self.test_cmd('add camera c1')
+        self.test_cmd('add videotestgen v1')
         self.test_cmd('add monitor m1')
-        self.test_cmd('link c1.out m1.in')
+        self.test_cmd('add switcher s1 2')
+
+        self.test_cmd('link c1.out s1.in1')
+        self.test_cmd('link v1.out s1.in2')
+        self.test_cmd('link s1.prog_out m1.in')
 
         cmd = ""
         while cmd != "exit":
@@ -67,6 +73,11 @@ class Main:
                 camera = Camera(device_name)
                 self.station.add_device(camera)
 
+            if device_type == 'switcher':
+                inputs = int(tokens.pop(0))
+                switcher = Switcher(device_name, inputs)
+                self.station.add_device(switcher)
+
             if device_type == 'monitor':
                 monitor = Monitor(device_name, (320,240), (0,0))
                 self.station.add_device(monitor)
@@ -80,9 +91,11 @@ class Main:
             self.station.graph_pipeline()
 
         if first_token == "link":
-            port_1_uuid = self.station.get_port_uuid(tokens.pop(0))
-            port_2_uuid = self.station.get_port_uuid(tokens.pop(0))
-            self.station.link(port_1_uuid, port_2_uuid)
+            port1, port2 = tokens.pop(0), tokens.pop(0)
+            port_1_uuid = self.station.get_port_uuid(port1)
+            port_2_uuid = self.station.get_port_uuid(port2)
+            name = port1 + "-" + port2
+            self.station.link(name, port_1_uuid, port_2_uuid)
 
         if first_token == "unlink":
             port_1_uuid = self.station.get_port_uuid(tokens.pop(0))

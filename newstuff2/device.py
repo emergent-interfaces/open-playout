@@ -20,7 +20,8 @@ class Device(object):
 
     # todo Implement device_pad_name choice
     def add_input_port_on(self, device, device_pad_name="sink", port_name="in"):
-        intervideosrc = Gst.ElementFactory.make('intervideosrc', None)
+        element_name = self.bin.get_name() + "." + port_name
+        intervideosrc = Gst.ElementFactory.make('intervideosrc', element_name)
         self.bin.add(intervideosrc)
 
         channel_uuid = uuid.uuid1()
@@ -31,7 +32,8 @@ class Device(object):
 
     # todo Implement device_pad_name choice
     def add_output_port_on(self, device, device_pad_name="src", port_name="out"):
-        intervideosink = Gst.ElementFactory.make('intervideosink', None)
+        element_name = self.bin.get_name() + "." + port_name
+        intervideosink = Gst.ElementFactory.make('intervideosink', element_name)
         self.bin.add(intervideosink)
 
         channel_uuid = uuid.uuid1()

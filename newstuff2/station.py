@@ -57,8 +57,8 @@ class Station(object):
         self.pipeline.remove(device.get_bin())
         self.devices.remove(device)
 
-    def link(self, port_1_uuid, port_2_uuid):
-        link = Link('link1', port_1_uuid, port_2_uuid)  
+    def link(self, name, port_1_uuid, port_2_uuid):
+        link = Link(name, port_1_uuid, port_2_uuid)
         self.pipeline.add(link.get_bin())
         link.set_playing()
         self.links.append(link)
