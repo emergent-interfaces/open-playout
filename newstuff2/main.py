@@ -7,6 +7,7 @@ from threading import Thread
 
 from station import Station
 from monitor import Monitor
+from camera import Camera
 from video_test_gen import VideoTestGen
 
 os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
@@ -41,9 +42,9 @@ class Main:
     def terminal(self):
         print "Open-Playout Server"
 
+        self.test_cmd('add camera c1')
         self.test_cmd('add monitor m1')
-        self.test_cmd('add videotestgen v1')
-        self.test_cmd('link v1.out m1.in')
+        self.test_cmd('link c1.out m1.in')
 
         cmd = ""
         while cmd != "exit":
@@ -61,6 +62,10 @@ class Main:
             if device_type == 'videotestgen':
                 videotestgen = VideoTestGen(device_name)
                 self.station.add_device(videotestgen)
+
+            if device_type == 'camera':
+                camera = Camera(device_name)
+                self.station.add_device(camera)
 
             if device_type == 'monitor':
                 monitor = Monitor(device_name, (320,240), (0,0))
