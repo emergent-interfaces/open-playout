@@ -61,6 +61,13 @@ class Main:
         tokens = shlex.split(cmd)
         first_token = tokens.pop(0)
 
+        # If first argument is a device, assume an action is coming
+        device = self.station.find_device_by_name(first_token)
+        if device:
+            action = tokens.pop(0)
+            device.do_action(action, tokens)
+
+        # Generic actions
         if first_token == "add":
             device_type = tokens.pop(0)
             device_name = tokens.pop(0)

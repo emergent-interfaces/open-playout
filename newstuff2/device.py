@@ -16,6 +16,7 @@ class Device(object):
         self.name = name
         self.bin = Gst.Bin.new(self.name)
         self.ports = []
+        self.actions = {}
 
     # todo Implement device_pad_name choice
     def add_input_port_on(self, device, device_pad_name="sink", port_name="in"):
@@ -52,3 +53,17 @@ class Device(object):
 
     def set_ready(self):
         self.bin.set_state(Gst.State.READY)
+
+    def add_action(self, action, function_ptr, description):
+        self.actions[action] = {"function": function_ptr,
+                                "description": description}
+
+    def do_action(self, action, args=None):
+        if self.has_action(action):
+            self.actions[action]["function"](*args)
+
+    def has_action(self, action):
+        if action in self.actions:
+            return True
+        else:
+            return False

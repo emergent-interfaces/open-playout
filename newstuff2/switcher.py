@@ -73,9 +73,9 @@ class Switcher(Device):
             self.set_bus_input("preview", 0)
             self.set_bus_input("program", 0)
 
-        #self.add_action("take", self.take, "Swap program and preview or set program")
-        #self.add_action("preview", self.preview, "Set preview")
-        #self.add_action("fade", self.fade, "Set fade position")
+        self.add_action("take", self.take, "Swap program and preview or set program")
+        self.add_action("preview", self.preview, "Set preview")
+        self.add_action("fade", self.fade, "Set fade position")
 
     def set_bus_input(self, bus, input_id):
         print "Setting bus input: " + bus + ", " + str(input_id)
