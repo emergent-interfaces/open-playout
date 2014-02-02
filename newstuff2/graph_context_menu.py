@@ -1,29 +1,40 @@
 from PySide import QtGui, QtCore
-
+from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
 
 class GraphContextMenu(QtGui.QMenu):
-	def __init__(self):
+	def __init__(self, graph, newNodePos):
 		super(GraphContextMenu, self).__init__()
-		self.addMenu(GraphSourcesMenu())
-		self.addMenu(GraphSwitchesMenu())
-		self.addMenu(GraphOutputsMenu())
-		
+		self.addMenu(GraphSourcesMenu(graph, newNodePos))
+		self.addMenu(GraphSwitchesMenu(graph, newNodePos))
+		self.addMenu(GraphDisplayMenu(graph, newNodePos))
+		self.addSeparator()
+		self.addAction("Graph")
 
 class GraphSourcesMenu(QtGui.QMenu):
-	def __init__(self):
-		super(GraphSourcesMenu, self).__init__()
+	def __init__(self, graph, newNodePos):
+		super(GraphSourcesMenu, self).__init__(graph, newNodePos)
 		self.setTitle('Sources')
-		self.addAction("Video Test Generator")
-		self.addAction("V4L2 Source")
+		
+		action = self.addAction("Video Test Generator")
+		action.triggered.connect(lambda: graph.addNodeFromMenu(VideoTestGenNode, newNodePos))
+		
+		action = self.addAction("V4L2 Source")
+		action.triggered.connect(lambda: graph.addNodeFromMenu(V4L2SourceNode, newNodePos))
 
 class GraphSwitchesMenu(QtGui.QMenu):
-	def __init__(self):
-		super(GraphSwitchesMenu, self).__init__()
+	def __init__(self, graph, newNodePos):
+		super(GraphSwitchesMenu, self).__init__(graph, newNodePos)
 		self.setTitle('Switches')
-		self.addAction("4 Input Video Switcher")
 
-class GraphOutputsMenu(QtGui.QMenu):
-	def __init__(self):
-		super(GraphOutputsMenu, self).__init__()
+		action = self.addAction("4 Input Video Switcher")
+		action.triggered.connect(lambda: graph.addNodeFromMenu(Switcher4Node, newNodePos))
+
+class GraphDisplayMenu(QtGui.QMenu):
+	def __init__(self, graph, newNodePos):
+		super(GraphDisplayMenu, self).__init__(graph, newNodePos)
 		self.setTitle('Outputs')
-		self.addAction("Screen Output")		
+
+		action = self.addAction("Screen Display")
+		action.triggered.connect(lambda: graph.addNodeFromMenu(ScreenOutputNode, newNodePos))
+
+		

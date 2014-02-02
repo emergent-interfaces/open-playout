@@ -4,13 +4,20 @@ from PySide import QtGui, QtCore
 from PySide.QtGui import QApplication, QMainWindow
 from graph import GraphWidget
 
-class Editor():
+from station import Station
+from monitor import Monitor
+from video_test_gen import VideoTestGen
+
+class GuiApp():
     def __init__(self):
         pass
 
-    def start(self):
+    def start(self, args):
+        self.station = Station({}, args)
+        self.station.run()
+
         self.app = QApplication(sys.argv)
-        frame = MainWindow()
+        frame = MainWindow(self.station)
         frame.show()
         self.app.exec_()
 
@@ -22,9 +29,16 @@ class Communicate(QtCore.QObject):
     cmdReceived = QtCore.Signal(str)
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, station, parent=None):
         super(MainWindow, self).__init__(parent)
+        self.station = station
         self.initUI()
+
+        # videotestgen = VideoTestGen("v1")
+        # self.station.add_device(videotestgen)
+        # monitor = Monitor("m1", (320,240), (0,0))
+        # self.station.add_device(monitor)
+        # self.station.link("v1-m1", "v1.out", "m1.in")
 
     def initUI(self):
         hbox = QtGui.QHBoxLayout(self)

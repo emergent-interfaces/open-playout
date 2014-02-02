@@ -5,7 +5,7 @@ from gi.repository import GObject, GdkX11
 import shlex
 from threading import Thread
 
-from editor import Editor
+import editor
 from station import Station
 from monitor import Monitor
 from camera import Camera
@@ -21,21 +21,14 @@ class Main:
         parser.add_argument('-g', '--graph',
             help="Generate graph of pipeline",
             action='store_true')
-        args = parser.parse_args()
+        self.args = parser.parse_args()
 
         GObject.threads_init()
         #Gdk.threads_init()
 
-        self.station = Station({}, args)
-        self.displays = {}
-
     def run(self):
-        self.station.run()
-
-        Thread(target=self.terminal).start()
-        
-        self.editor = Editor()
-        sys.exit(self.editor.start())
+        app = editor.GuiApp()
+        app.start(self.args)
 
     def terminal(self):
         print "Open-Playout Server"
