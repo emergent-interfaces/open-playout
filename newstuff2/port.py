@@ -16,6 +16,9 @@ class Port(QtGui.QGraphicsItem):
         self.brushes['background'] = QtGui.QBrush(QtGui.QColor(157,157,157), QtCore.Qt.SolidPattern)
         self.brushes['backgroundHovered'] = QtGui.QBrush(QtGui.QColor(200,120,10), QtCore.Qt.SolidPattern)
 
+    def fullName(self):
+        return self.parentItem().name + "." + self.name
+
     def boundingRect(self):
         penWidth = 1.0
 
@@ -69,7 +72,6 @@ class Port(QtGui.QGraphicsItem):
 
         self.temporaryWire = wire
 
-    # todo Check for 1 in and 1 out port before finalizing wire
     def mouseReleaseEvent(self, event):
         endPort = self.portAt(event.scenePos())
 
@@ -77,6 +79,8 @@ class Port(QtGui.QGraphicsItem):
             self.temporaryWire.setPort2(endPort)
             if not self.temporaryWire.isValid():
                 self.scene().removeItem(self.temporaryWire)
+            else:
+                self.scene().addingWire(self.temporaryWire)
 
         else:
             self.scene().removeItem(self.temporaryWire)

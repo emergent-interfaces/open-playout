@@ -7,6 +7,7 @@ from graph import GraphWidget
 from station import Station
 from monitor import Monitor
 from video_test_gen import VideoTestGen
+from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
 
 class GuiApp():
     def __init__(self):
@@ -73,6 +74,24 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(splitter)
         self.setGeometry(300, 300, 600, 600)
         self.setWindowTitle('QtGui.QSplitter')
+
+        # Connect GraphWidget
+        self.graphWidget.nodeAdded.connect(self.addDeviceForNode)
+        self.graphWidget.wireAdded.connect(self.addLinkForWire)
+
+    def addDeviceForNode(self, node):
+        if type(node) == ScreenOutputNode:
+            monitor = Monitor(node.name, (320,240), (0,0))
+            self.station.add_device(monitor)
+
+        if type(node) == VideoTestGenNode:
+            videotestgen = VideoTestGen(node.name)
+            self.station.add_device(videotestgen)
+
+    def addLinkForWire(self, wire):
+        port1_name = wire.port1.fullName()
+        port2_name = wire.port2.fullName()
+        self.station.link("-".join([port1_name, port2_name]), port1_name, port2_name)
 
     def doConsoleCmd(self):
         cmd = self.consoleInput.text()

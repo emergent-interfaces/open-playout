@@ -4,6 +4,7 @@ from PySide.QtGui import QApplication, QMainWindow
 from PySide.QtCore import QPointF
 
 from node import Node
+from wire import Wire
 from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
 from graph_context_menu import GraphContextMenu
 
@@ -11,8 +12,12 @@ from graph_context_menu import GraphContextMenu
 # TODO THIS SHOULD SEND SIGNALS WHEN ADDING, LINKING, AND DELETEING
 # =================================================================
 class GraphWidget(QtGui.QGraphicsView):
+    nodeAdded = QtCore.Signal(Node)
+    wireAdded = QtCore.Signal(Wire)
+
     def __init__(self):
         self.scene = QtGui.QGraphicsScene()
+        self.scene.addingWire = self.addingWire
 
         super(GraphWidget, self).__init__(self.scene)
         self.initUI()
@@ -27,25 +32,6 @@ class GraphWidget(QtGui.QGraphicsView):
         self.brushes = {}
         self.brushes['background'] = QtGui.QBrush(QtGui.QColor(57,57,57), QtCore.Qt.SolidPattern)
         self.setBackgroundBrush(self.brushes['background'])
-
-        # v1 = VideoTestGenNode('vid1')
-        # self.scene.addItem(v1)
-
-        # v2 = VideoTestGenNode('vid2')
-        # v2.setPos(QPointF(0,80))
-        # self.scene.addItem(v2)
-
-        # s1 = Switcher4Node('switcher1')
-        # s1.setPos(QPointF(200,0))
-        # self.scene.addItem(s1)
-
-        # out1 = ScreenOutputNode('out1')
-        # out1.setPos(QPointF(400,0))
-        # self.scene.addItem(out1)
-
-        # out2 = ScreenOutputNode('out2')
-        # out2.setPos(QPointF(400,80))
-        # self.scene.addItem(out2)
 
     def resizeEvent(self, event):
         self.setSceneRect(self.rect())
@@ -100,6 +86,7 @@ class GraphWidget(QtGui.QGraphicsView):
     def addNode(self, node, position=QPointF(0,0)):
         node.setPos(self.mapFromScene(position))
         self.scene.addItem(node)
+        self.nodeAdded.emit(node)
 
     def freeName(self, name):
         node_names = [item.name for item in self.scene.items() if isinstance(item, Node)]
@@ -109,6 +96,9 @@ class GraphWidget(QtGui.QGraphicsView):
             n = n+1
 
         return name + str(n)
+
+    def addingWire(self, wire):
+        self.wireAdded.emit(wire)
 
 if __name__ == "__main__":
     import sys
