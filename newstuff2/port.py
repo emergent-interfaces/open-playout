@@ -80,7 +80,7 @@ class Port(QtGui.QGraphicsItem):
             if not self.temporaryWire.isValid():
                 self.scene().removeItem(self.temporaryWire)
             else:
-                self.scene().addingWire(self.temporaryWire)
+                self.scene().notifyView('add', self.temporaryWire)
 
         else:
             self.scene().removeItem(self.temporaryWire)

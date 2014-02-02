@@ -17,7 +17,7 @@ class GraphWidget(QtGui.QGraphicsView):
 
     def __init__(self):
         self.scene = QtGui.QGraphicsScene()
-        self.scene.addingWire = self.addingWire
+        self.scene.notifyView = self.notifyView
 
         super(GraphWidget, self).__init__(self.scene)
         self.initUI()
@@ -97,8 +97,15 @@ class GraphWidget(QtGui.QGraphicsView):
 
         return name + str(n)
 
-    def addingWire(self, wire):
-        self.wireAdded.emit(wire)
+    # Generic function available on QGraphicsScene to perform signal emits from
+    # the QGraphicsView
+    def notifyView(self, action, object):
+        if action == "add":
+            if isinstance(object, Wire):
+                self.wireAdded.emit(object)
+
+        if action == "delete":
+            pass
 
 if __name__ == "__main__":
     import sys
