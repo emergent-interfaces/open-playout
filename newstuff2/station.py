@@ -86,6 +86,6 @@ class Station(object):
     def run(self):
         self.pipeline.set_state(Gst.State.PLAYING)
 
-    def assign_drawing_area(self, drawing_area, monitor_name):
-        sink = self.find_device_by_name(monitor_name).get_sink()
-        sink.set_window_handle(drawing_area.get_window().get_xid())
+    # def assign_drawing_area(self, drawing_area, monitor_name):
+    #     sink = self.find_device_by_name(monitor_name).get_sink()
+    #     sink.set_window_handle(drawing_area.get_window().get_xid())

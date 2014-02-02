@@ -1,10 +1,11 @@
 import os, sys
 import argparse
 import gi
-from gi.repository import GObject, Gtk, Gdk, GdkX11
+from gi.repository import GObject, GdkX11
 import shlex
 from threading import Thread
 
+from editor import Editor
 from station import Station
 from monitor import Monitor
 from camera import Camera
@@ -23,7 +24,7 @@ class Main:
         args = parser.parse_args()
 
         GObject.threads_init()
-        Gdk.threads_init()
+        #Gdk.threads_init()
 
         self.station = Station({}, args)
         self.displays = {}
@@ -31,19 +32,15 @@ class Main:
     def run(self):
         self.station.run()
 
-        # Almost definitely have some issues with threading
-        #Thread(target=self.terminal).start()
-
-        self.terminal()
-
-        #self.station.add()
-        #self.station.fix_connection()
-        #Gtk.main()
+        Thread(target=self.terminal).start()
+        
+        self.editor = Editor()
+        sys.exit(self.editor.start())
 
     def terminal(self):
         print "Open-Playout Server"
 
-        self.test_cmd('add camera c1')
+        self.test_cmd('add videotestgen c1')
         self.test_cmd('add videotestgen v1')
         self.test_cmd('add monitor m1')
         self.test_cmd('add switcher s1 2')
@@ -88,7 +85,7 @@ class Main:
             if device_type == 'monitor':
                 monitor = Monitor(device_name, (320,240), (0,0))
                 self.station.add_device(monitor)
-                #self.create_display('monitor1', (640, 480), (0,0))
+                #self.create_display('m1', (320, 240), (0,0))
 
         if first_token == "remove":
             device_name = tokens.pop(0)
@@ -108,36 +105,37 @@ class Main:
             self.station.unlink(port_1, port_2)
 
         if first_token == "exit":
-            Gtk.main_quit()
+            self.editor.exit()
 
     def test_cmd(self, cmd):
         print ">>>", cmd
         self.parse(cmd)
 
-    def create_display(self, name, size, location):
-        display_window = Gtk.Window()
-        self.displays[name] = display_window
-        display_window.set_title(name)
+    # def create_display(self, name, size, location):
+    #     display_window = Gtk.Window()
+    #     self.displays[name] = display_window
+    #     display_window.set_title(name)
 
-        drawing_area = Gtk.DrawingArea()
-        drawing_area.connect("realize", self.on_video_window_realize, name)
+    #     drawing_area = Gtk.DrawingArea()
+    #     drawing_area.connect("realize", self.on_video_window_realize, name)
 
-        display_window.add(drawing_area)
-        drawing_area.show()
-        display_window.show_all()
+    #     display_window.add(drawing_area)
+    #     drawing_area.show()
+    #     display_window.show_all()
 
-        if size == "full":
-            display_window.fullscreen()
-        else:
-            width, height = size
-            drawing_area.set_size_request(width, height)
+    #     if size == "full":
+    #         display_window.fullscreen()
+    #     else:
+    #         width, height = size
+    #         drawing_area.set_size_request(width, height)
 
-        left, top = location
-        if left != None and top != None:
-            display_window.move(left, top)
+    #     left, top = location
+    #     if left != None and top != None:
+    #         display_window.move(left, top)
 
-    def on_video_window_realize(self, drawing_area, monitor):
-        self.station.assign_drawing_area(drawing_area, monitor)
+    # def on_video_window_realize(self, drawing_area, monitor):
+    #     print "realizing"
+    #     self.station.assign_drawing_area(drawing_area, monitor)
 
 if __name__ == "__main__":
     main = Main()
