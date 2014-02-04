@@ -59,6 +59,7 @@ class Station(object):
 
     def link(self, name, port_1, port_2):
         link = Link(name, port_1, port_2)
+        print "Linking:", port_1, port_2
         self.pipeline.add(link.get_bin())
         link.set_playing()
         self.links.append(link)

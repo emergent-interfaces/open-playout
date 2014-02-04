@@ -17,8 +17,8 @@ class Switcher4Node(Node):
 		self.createPort('in2')
 		self.createPort('in3')
 		self.createPort('in4')
-		self.createPort('program', 'out')
-		self.createPort('preview', 'out')
+		self.createPort('prog_out', 'out')
+		self.createPort('prev_out', 'out')
 
 class ScreenOutputNode(Node):
 	def __init__(self, name):

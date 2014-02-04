@@ -7,6 +7,9 @@ from graph import GraphWidget
 from station import Station
 from monitor import Monitor
 from video_test_gen import VideoTestGen
+from camera import Camera
+from switcher import Switcher
+
 from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
 
 class GuiApp():
@@ -34,12 +37,6 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent)
         self.station = station
         self.initUI()
-
-        # videotestgen = VideoTestGen("v1")
-        # self.station.add_device(videotestgen)
-        # monitor = Monitor("m1", (320,240), (0,0))
-        # self.station.add_device(monitor)
-        # self.station.link("v1-m1", "v1.out", "m1.in")
 
     def initUI(self):
         hbox = QtGui.QHBoxLayout(self)
@@ -77,21 +74,37 @@ class MainWindow(QMainWindow):
 
         # Connect GraphWidget
         self.graphWidget.nodeAdded.connect(self.addDeviceForNode)
+        self.graphWidget.nodeRemoved.connect(self.removeDeviceForNode)
         self.graphWidget.wireAdded.connect(self.addLinkForWire)
+        self.graphWidget.wireRemoved.connect(self.removeLinkForWire)
+        self.graphWidget.requestGraphDebug.connect(self.makeGraphDebug)
 
     def addDeviceForNode(self, node):
         if type(node) == ScreenOutputNode:
-            monitor = Monitor(node.name, (320,240), (0,0))
-            self.station.add_device(monitor)
+            device = Monitor(node.name, (320,240), (0,0))
 
         if type(node) == VideoTestGenNode:
-            videotestgen = VideoTestGen(node.name)
-            self.station.add_device(videotestgen)
+            device = VideoTestGen(node.name)
+
+        if type(node) == V4L2SourceNode:
+            device = Camera(node.name)
+
+        if type(node) == Switcher4Node:
+            device = Switcher(node.name, 4)
+
+        self.station.add_device(device)           
+
+    def removeDeviceForNode(self, node):
+        device = self.station.find_device_by_name(node.name)
+        self.station.remove_device(device)
 
     def addLinkForWire(self, wire):
         port1_name = wire.port1.fullName()
         port2_name = wire.port2.fullName()
         self.station.link("-".join([port1_name, port2_name]), port1_name, port2_name)
+
+    def removeLinkForWire(self, wire):
+        self.station.unlink(wire.port1.fullName(), wire.port2.fullName())
 
     def doConsoleCmd(self):
         cmd = self.consoleInput.text()
@@ -99,6 +112,9 @@ class MainWindow(QMainWindow):
         sig.cmdReceived.emit(cmd)
 
         self.consoleInput.clear()
+
+    def makeGraphDebug(self):
+        self.station.graph_pipeline()
 
 if __name__ == "__main__":
         editor = Editor()

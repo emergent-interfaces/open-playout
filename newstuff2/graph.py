@@ -13,7 +13,10 @@ from graph_context_menu import GraphContextMenu
 # =================================================================
 class GraphWidget(QtGui.QGraphicsView):
     nodeAdded = QtCore.Signal(Node)
+    nodeRemoved = QtCore.Signal(Node)
     wireAdded = QtCore.Signal(Wire)
+    wireRemoved = QtCore.Signal(Wire)
+    requestGraphDebug = QtCore.Signal()
 
     def __init__(self):
         self.scene = QtGui.QGraphicsScene()
@@ -101,11 +104,19 @@ class GraphWidget(QtGui.QGraphicsView):
     # the QGraphicsView
     def notifyView(self, action, object):
         if action == "add":
+            if isinstance(object, Node):
+                self.nodeAdded.emit(object)
             if isinstance(object, Wire):
                 self.wireAdded.emit(object)
 
-        if action == "delete":
-            pass
+        if action == "remove":
+            if isinstance(object, Node):
+                self.nodeRemoved.emit(object)
+            if isinstance(object, Wire):
+                self.wireRemoved.emit(object)
+
+    def makeGraph(self):
+        self.requestGraphDebug.emit()
 
 if __name__ == "__main__":
     import sys

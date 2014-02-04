@@ -78,6 +78,7 @@ class Node(QtGui.QGraphicsItem):
         for wire in self.wires():
             wire.delete()
 
+        self.scene().notifyView('remove', self)
         self.scene().removeItem(self)
 
     def wires(self):

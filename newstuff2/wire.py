@@ -51,7 +51,7 @@ class Wire(QtGui.QGraphicsItem):
     def shape(self):
         stroker = QtGui.QPainterPathStroker()
         wirePath = self.path()
-        stroker.setWidth(5)
+        stroker.setWidth(20)
         return stroker.createStroke(wirePath)
 
     def paint(self, painter, option, widget):
@@ -96,6 +96,7 @@ class Wire(QtGui.QGraphicsItem):
         return wirePath
 
     def delete(self):
+        self.scene().notifyView('remove', self)
         self.scene().removeItem(self)
 
 def expand_qrect(qrect, amount):

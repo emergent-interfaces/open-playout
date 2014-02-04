@@ -8,7 +8,9 @@ class GraphContextMenu(QtGui.QMenu):
 		self.addMenu(GraphSwitchesMenu(graph, newNodePos))
 		self.addMenu(GraphDisplayMenu(graph, newNodePos))
 		self.addSeparator()
-		self.addAction("Graph")
+
+		action = self.addAction("Graph")
+		action.triggered.connect(graph.makeGraph)
 
 class GraphSourcesMenu(QtGui.QMenu):
 	def __init__(self, graph, newNodePos):
