@@ -37,6 +37,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__(parent)
         self.station = station
         self.initUI()
+        execfile('config.py')
 
     def initUI(self):
         hbox = QtGui.QHBoxLayout(self)
