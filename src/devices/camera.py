@@ -1,6 +1,6 @@
 import gi
 import sys
-import device
+from device import Device
 
 try:
     gi.require_version('Gst', '1.0')
@@ -11,74 +11,63 @@ except ValueError:
 from gi.repository import Gst
 
 
-class Camera(device.Device):
+class Camera(Device):
     def __init__(self, name):
-        device.Device.__init__(self, name)
+        Device.__init__(self, name)
 
         self.src = Gst.ElementFactory.make('v4l2src', None)
+        self.bin.add(self.src)
+
+        self.convert = Gst.ElementFactory.make('videoconvert', None)
+        self.bin.add(self.convert)
+
         self.caps_filter = Gst.ElementFactory.make('capsfilter', None)
-        self.text_overlay = Gst.ElementFactory.make('textoverlay', None)
-
-        self.bin.add(self.src)
+        self.caps_filter.set_property('caps', Gst.caps_from_string(Device.DEFAULT_VIDEO_CAPS))
         self.bin.add(self.caps_filter)
-        self.bin.add(self.text_overlay)
 
-        self.configure_textoverlay()
+        self.src.link(self.convert)
+        self.convert.link(self.caps_filter)
 
-        self.src.link(self.caps_filter)
-        self.caps_filter.link(self.text_overlay)
+        self.add_output_port_on(self.caps_filter, "src")
 
-        pad = self.text_overlay.get_static_pad("src")
-        ghost_pad = Gst.GhostPad.new("src", pad)
-        self.bin.add_pad(ghost_pad)
-        ghost_pad.add_probe(Gst.PadProbeType.EVENT_DOWNSTREAM, self.probe_callback, None)
+        # pad = self.text_overlay.get_static_pad("src")
+        # ghost_pad = Gst.GhostPad.new("src", pad)
+        # self.bin.add_pad(ghost_pad)
+        # ghost_pad.add_probe(Gst.PadProbeType.EVENT_DOWNSTREAM, self.probe_callback, None)
 
-        self.caps_filter.set_property('caps',
-        Gst.caps_from_string("video/x-raw, width=640, height=480"))
+        # self.active = True
+        # self.device = self.src.get_property('device')
 
-        self.active = True
-        self.device = self.src.get_property('device')
+    # def fall_back(self):
+    #     self.backup_source = Gst.ElementFactory.make('videotestsrc', None)
+    #     self.bin.add(self.backup_source)
 
-    def probe_callback(self, pad, info, user_data):
-        print "In probe callback "
-        return Gst.PadProbeReturn.PASS
+    #     self.src.set_state(Gst.State.NULL)
 
-    def configure_textoverlay(self):
-        self.text_overlay.set_property("shaded-background", True)
+    #     self.src.unlink(self.caps_filter)
+    #     del self.src
+    #     self.backup_source.link(self.caps_filter)
 
-    def set_overlay_text(self, text):
-        self.text_overlay.set_property("text", text)
+    #     overlay_text = self.name + '\n' + 'Lost source ' + self.device
+    #     self.set_overlay_text(overlay_text)
 
-    def fall_back(self):
-        self.backup_source = Gst.ElementFactory.make('videotestsrc', None)
-        self.bin.add(self.backup_source)
+    #     self.backup_source.set_state(Gst.State.PLAYING)
 
-        self.src.set_state(Gst.State.NULL)
+    #     self.active = False
 
-        self.src.unlink(self.caps_filter)
-        del self.src
-        self.backup_source.link(self.caps_filter)
+    # def stand_up(self):
+    #     self.src = Gst.ElementFactory.make('v4l2src', None)
+    #     self.bin.add(self.src)
 
-        overlay_text = self.name + '\n' + 'Lost source ' + self.device
-        self.set_overlay_text(overlay_text)
+    #     self.backup_source.set_state(Gst.State.NULL)
 
-        self.backup_source.set_state(Gst.State.PLAYING)
+    #     self.backup_source.unlink(self.caps_filter)
+    #     del self.backup_source
+    #     self.src.link(self.caps_filter)
 
-        self.active = False
+    #     self.set_overlay_text('')
 
-    def stand_up(self):
-        self.src = Gst.ElementFactory.make('v4l2src', None)
-        self.bin.add(self.src)
+    #     self.src.set_state(Gst.State.PLAYING)
 
-        self.backup_source.set_state(Gst.State.NULL)
-
-        self.backup_source.unlink(self.caps_filter)
-        del self.backup_source
-        self.src.link(self.caps_filter)
-
-        self.set_overlay_text('')
-
-        self.src.set_state(Gst.State.PLAYING)
-
-        self.active = True
-        self.device = self.src.get_property('device')
+    #     self.active = True
+    #     self.device = self.src.get_property('device')

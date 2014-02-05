@@ -2,15 +2,15 @@ import sys
 import PySide
 from PySide import QtGui, QtCore
 from PySide.QtGui import QApplication, QMainWindow
-from graph import GraphWidget
+from graph.graph import GraphWidget
 
 from station import Station
-from monitor import Monitor
-from video_test_gen import VideoTestGen
-from camera import Camera
-from switcher import Switcher
+from devices.monitor import Monitor
+from devices.video_test_gen import VideoTestGen
+from devices.camera import Camera
+from devices.switcher import Switcher
 
-from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
+from graph.node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
 
 class GuiApp():
     def __init__(self):

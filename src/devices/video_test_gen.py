@@ -30,13 +30,11 @@ class VideoTestGen(Device):
         self.caps_filter = Gst.ElementFactory.make('capsfilter', None)
         self.bin.add(self.caps_filter)
 
-        caps = Gst.caps_from_string("video/x-raw,format=AYUV,width=640,height=480")
+        caps = Gst.caps_from_string(Device.DEFAULT_VIDEO_CAPS)
         self.caps_filter.set_property('caps', caps)
 
         self.src.link(self.text_overlay)
         self.text_overlay.link(self.convert)
         self.convert.link(self.caps_filter)
 
-        pad = self.caps_filter.get_static_pad("src")
-        ghost_pad = Gst.GhostPad.new("src", pad)
-        self.bin.add_pad(ghost_pad)
+        self.add_output_port_on(self.caps_filter, "src")

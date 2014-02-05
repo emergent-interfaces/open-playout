@@ -26,23 +26,21 @@ class Switcher(Device):
         self.prev_mixer = Gst.ElementFactory.make('videomixer', None)
         self.bin.add(self.prev_mixer)
 
-        # Add ghost pads for static mixer pads
-        pad = Gst.GhostPad.new("prog_out",
-                               self.prog_mixer.get_static_pad("src"))
-        self.bin.add_pad(pad)
-
-        pad = Gst.GhostPad.new("prev_out",
-                               self.prev_mixer.get_static_pad("src"))
-        self.bin.add_pad(pad)
+        # Add outputs for static mixer pads
+        self.add_output_port_on(self.prog_mixer, "src", "prog_out")
+        self.add_output_port_on(self.prev_mixer, "src", "prev_out")
 
         for input_id in range(inputs):
-            # Create tee and link ghostpads to bin
+            # Create tee and create input
             tee = Gst.ElementFactory.make('tee', None)
             self.bin.add(tee)
 
             name = "in" + str(input_id + 1)
-            pad = Gst.GhostPad.new(name, tee.get_static_pad("sink"))
-            self.bin.add_pad(pad)
+
+            self.add_input_port_on(tee, name, name)
+
+            #pad = Gst.GhostPad.new(name, tee.get_static_pad("sink"))
+            #self.bin.add_pad(pad)
 
             # Create queues
             queue1 = Gst.ElementFactory.make('queue', None)
