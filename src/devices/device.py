@@ -17,6 +17,7 @@ class Device(object):
         self.bin = Gst.Bin.new(self.name)
         self.ports = []
         self.actions = {}
+        self.controlPanels = []
 
     # todo Implement device_pad_name choice
     def add_input_port_on(self, device, device_pad_name="sink", port_name="in"):
@@ -67,3 +68,9 @@ class Device(object):
             return True
         else:
             return False
+
+    def make_control_panel(self, panel):
+        print 'Please implement make_control_panel for this device.'
+
+    def remove_control_panel(self, control_panel):
+        self.controlPanels.remove(control_panel)

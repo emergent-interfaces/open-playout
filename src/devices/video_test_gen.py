@@ -1,6 +1,9 @@
 import gi
 import sys
 from device import Device
+from observable_variable import ObservableVariable
+
+from video_test_gen_control_panel import VideoTestGenControlPanel
 
 try:
     gi.require_version('Gst', '1.0')
@@ -15,9 +18,12 @@ class VideoTestGen(Device):
     def __init__(self, name, pattern=0):
         Device.__init__(self, name)
 
+        self.pattern = ObservableVariable(pattern)
+        self.pattern.changed.connect(self.change_pattern)
+
         self.src = Gst.ElementFactory.make('videotestsrc', None)
         self.bin.add(self.src)
-        self.src.set_property('pattern', pattern)
+        self.src.set_property('pattern', self.pattern.get_value())
 
         self.convert = Gst.ElementFactory.make('videoconvert', None)
         self.bin.add(self.convert)
@@ -38,3 +44,11 @@ class VideoTestGen(Device):
         self.convert.link(self.caps_filter)
 
         self.add_output_port_on(self.caps_filter, "src")
+
+    def change_pattern(self):
+        self.src.set_property('pattern', self.pattern.get_value())
+
+    def make_control_panel(self, parent):
+        panel = VideoTestGenControlPanel(self, parent)
+        self.controlPanels.append(panel)
+        return panel

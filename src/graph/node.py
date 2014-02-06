@@ -23,6 +23,8 @@ class Node(QtGui.QGraphicsItem):
 
         self.sizeBackground()
 
+        self.device = None
+
     def itemChange(self, change, value):
         if change == QtGui.QGraphicsItem.ItemPositionChange and self.scene():
             self.scene().update()
@@ -93,3 +95,6 @@ class Node(QtGui.QGraphicsItem):
             return True
         else:
             return False
+
+    def mouseDoubleClickEvent(self, event):
+        self.scene().notifyView('show', self)

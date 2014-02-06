@@ -18,6 +18,7 @@ class GraphWidget(QtGui.QGraphicsView):
     wireAdded = QtCore.Signal(Wire)
     wireRemoved = QtCore.Signal(Wire)
     requestGraphDebug = QtCore.Signal()
+    controlPanelRequested = QtCore.Signal(Node)
 
     def __init__(self):
         self.scene = PlayoutGraphicsScene(self)
@@ -68,6 +69,10 @@ class GraphWidget(QtGui.QGraphicsView):
                 self.nodeRemoved.emit(object)
             if isinstance(object, Wire):
                 self.wireRemoved.emit(object)
+
+        if action == "show":
+            if isinstance(object, Node):
+                self.controlPanelRequested.emit(object)
 
 class PlayoutGraphicsScene(QtGui.QGraphicsScene):
     def __init__(self, view):

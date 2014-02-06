@@ -79,6 +79,7 @@ class MainWindow(QMainWindow):
         self.graphWidget.wireAdded.connect(self.addLinkForWire)
         self.graphWidget.wireRemoved.connect(self.removeLinkForWire)
         self.graphWidget.requestGraphDebug.connect(self.makeGraphDebug)
+        self.graphWidget.controlPanelRequested.connect(self.makeControlPanel)
 
     def addDeviceForNode(self, node):
         if type(node) == ScreenOutputNode:
@@ -93,7 +94,8 @@ class MainWindow(QMainWindow):
         if type(node) == Switcher4Node:
             device = Switcher(node.name, 4)
 
-        self.station.add_device(device)           
+        self.station.add_device(device)
+        node.device = device           
 
     def removeDeviceForNode(self, node):
         device = self.station.find_device_by_name(node.name)
@@ -116,6 +118,10 @@ class MainWindow(QMainWindow):
 
     def makeGraphDebug(self):
         self.station.graph_pipeline()
+
+    def makeControlPanel(self, node):
+        controlPanel = node.device.make_control_panel(self)
+        controlPanel.show()
 
 if __name__ == "__main__":
         editor = Editor()
