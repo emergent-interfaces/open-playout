@@ -72,5 +72,10 @@ class Device(object):
     def make_control_panel(self, panel):
         print 'Please implement make_control_panel for this device.'
 
+    def make_control_panel(self, parent):
+        panel = self.ControlPanelClass(self, parent)
+        self.controlPanels.append(panel)
+        return panel
+
     def remove_control_panel(self, control_panel):
         self.controlPanels.remove(control_panel)

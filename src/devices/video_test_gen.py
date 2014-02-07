@@ -17,6 +17,7 @@ from gi.repository import Gst
 class VideoTestGen(Device):
     def __init__(self, name, pattern=0):
         Device.__init__(self, name)
+        self.ControlPanelClass = VideoTestGenControlPanel
 
         self.pattern = ObservableVariable(pattern)
         self.pattern.changed.connect(self.change_pattern)
@@ -47,8 +48,3 @@ class VideoTestGen(Device):
 
     def change_pattern(self):
         self.src.set_property('pattern', self.pattern.get_value())
-
-    def make_control_panel(self, parent):
-        panel = VideoTestGenControlPanel(self, parent)
-        self.controlPanels.append(panel)
-        return panel
