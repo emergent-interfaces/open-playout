@@ -7,7 +7,10 @@ class VideoTestGenControlPanel(ControlPanel):
         self.init_ui()
 
     def init_ui(self):
-        patternSelector = QtGui.QComboBox(self)
+        hbox = QtGui.QHBoxLayout()
+        self.setLayout(hbox)
+
+        patternSelector = QtGui.QComboBox()
         patternSelector.addItem("SMPTE")
         patternSelector.addItem("snow")
         patternSelector.addItem("black")
@@ -31,6 +34,7 @@ class VideoTestGenControlPanel(ControlPanel):
         patternSelector.addItem("bar")
         patternSelector.addItem("pinwheel")
         patternSelector.addItem("spokes")
+        hbox.addWidget(patternSelector)
 
         patternSelector.setCurrentIndex(self.device.pattern.get_value())
 

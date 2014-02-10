@@ -119,6 +119,8 @@ class PlayoutGraphicsScene(QtGui.QGraphicsScene):
         node.setPos(position)
         self.addItem(node)
         self.view.notifyView('add', node)
+        
+        return node
 
     def addWire(self, portFullName1, portFullName2):
         port1 = self.portByFullName(portFullName1)
@@ -127,6 +129,8 @@ class PlayoutGraphicsScene(QtGui.QGraphicsScene):
         wire = Wire(port1, port2)
         self.addItem(wire)
         self.view.notifyView('add', wire)
+
+        return wire
 
     def ports(self):
         return [item for item in self.items() if isinstance(item, Port)]

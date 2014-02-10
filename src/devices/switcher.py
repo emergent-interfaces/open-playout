@@ -1,6 +1,9 @@
 import gi
 import sys
 from device import Device
+from observable_variable import ObservableVariable
+
+from switcher_control_panel import SwitcherControlPanel
 
 try:
     gi.require_version('Gst', '1.0')
@@ -12,12 +15,13 @@ from gi.repository import Gst
 
 
 class Switcher(Device):
-    program_active_id = 0
-    preview_active_id = 0
-    opacity = 1.0
-
     def __init__(self, name, inputs):
         Device.__init__(self, name)
+        self.ControlPanelClass = SwitcherControlPanel
+
+        self.program_active_id = ObservableVariable(0)
+        self.preview_active_id = ObservableVariable(0)
+        self.opacity = ObservableVariable(1.0)
 
         # Create elements that exist for all instances of the switcher
         self.prog_mixer = Gst.ElementFactory.make('videomixer', None)
@@ -84,12 +88,12 @@ class Switcher(Device):
 
         if bus == "program":
             mixer = self.prog_mixer
-            low_pad_name = "sink_" + str(self.preview_active_id)
-            prev_high_pad_name = "sink_" + str(self.program_active_id)
+            low_pad_name = "sink_" + str(self.preview_active_id.get_value())
+            prev_high_pad_name = "sink_" + str(self.program_active_id.get_value())
         elif bus == "preview":
             mixer = self.prev_mixer
-            low_pad_name = "sink_" + str(self.program_active_id)
-            prev_high_pad_name = "sink_" + str(self.preview_active_id)
+            low_pad_name = "sink_" + str(self.program_active_id.get_value())
+            prev_high_pad_name = "sink_" + str(self.preview_active_id.get_value())
         else:
             return
 
@@ -114,11 +118,11 @@ class Switcher(Device):
 
         # Update
         if bus == "program":
-            self.program_active_id = input_id
+            self.program_active_id.set_value(input_id)
         elif bus == "preview":
-            self.preview_active_id = input_id
+            self.preview_active_id.set_value(input_id)
 
-        self.set_opacity(self.opacity)
+        self.set_opacity(self.opacity.get_value())
 
         #self.debug_mixer(mixer)
 
@@ -136,9 +140,9 @@ class Switcher(Device):
             print  pad_info
 
     def take(self, program_id=None):
-        if not program_id:
-            current_prog_id = self.program_active_id
-            current_prev_id = self.preview_active_id
+        if program_id == None:
+            current_prog_id = self.program_active_id.get_value()
+            current_prev_id = self.preview_active_id.get_value()
 
             self.set_bus_input("preview", current_prog_id)
             self.set_bus_input("program", current_prev_id)
@@ -149,11 +153,11 @@ class Switcher(Device):
         self.set_bus_input("preview", int(preview_id))
 
     def set_opacity(self, opacity):
-        self.opacity = opacity
+        self.opacity.set_value(opacity)
 
-        pad = self.prog_mixer.get_static_pad("sink_" + str(self.program_active_id))
+        pad = self.prog_mixer.get_static_pad("sink_" + str(self.program_active_id.get_value()))
 
-        if self.program_active_id != self.preview_active_id:
+        if self.program_active_id.get_value() != self.preview_active_id.get_value():
             pad.set_property("alpha", opacity)
         else:
             pad.set_property("alpha", 1.0)
