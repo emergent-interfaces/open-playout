@@ -11,5 +11,8 @@ class ObservableVariable(QtCore.QObject):
 		self._value = new_value
 		self.changed.emit(new_value)
 
+	def set_value_quietly(self, new_value):
+		self._value = new_value
+
 	def get_value(self):
 		return self._value

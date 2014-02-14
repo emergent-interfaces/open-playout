@@ -21,6 +21,8 @@ class Switcher4Node(Node):
 		self.createPort('prev_out', 'out')
 
 class ScreenOutputNode(Node):
-	def __init__(self, name):
+	def __init__(self, name, size, location):
 		super(ScreenOutputNode, self).__init__(name)
+		self.size = size
+		self.location = location
 		self.createPort('in')

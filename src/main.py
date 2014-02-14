@@ -78,7 +78,6 @@ class Main:
             if device_type == 'monitor':
                 monitor = Monitor(device_name, (320,240), (0,0))
                 self.station.add_device(monitor)
-                #self.create_display('m1', (320, 240), (0,0))
 
         if first_token == "remove":
             device_name = tokens.pop(0)
@@ -103,32 +102,6 @@ class Main:
     def test_cmd(self, cmd):
         print ">>>", cmd
         self.parse(cmd)
-
-    # def create_display(self, name, size, location):
-    #     display_window = Gtk.Window()
-    #     self.displays[name] = display_window
-    #     display_window.set_title(name)
-
-    #     drawing_area = Gtk.DrawingArea()
-    #     drawing_area.connect("realize", self.on_video_window_realize, name)
-
-    #     display_window.add(drawing_area)
-    #     drawing_area.show()
-    #     display_window.show_all()
-
-    #     if size == "full":
-    #         display_window.fullscreen()
-    #     else:
-    #         width, height = size
-    #         drawing_area.set_size_request(width, height)
-
-    #     left, top = location
-    #     if left != None and top != None:
-    #         display_window.move(left, top)
-
-    # def on_video_window_realize(self, drawing_area, monitor):
-    #     print "realizing"
-    #     self.station.assign_drawing_area(drawing_area, monitor)
 
 if __name__ == "__main__":
     main = Main()

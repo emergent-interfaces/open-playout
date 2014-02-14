@@ -5,6 +5,7 @@ from PySide.QtGui import QApplication, QMainWindow
 from graph.graph import GraphWidget
 
 from station import Station
+from display import Display
 from devices.monitor import Monitor
 from devices.video_test_gen import VideoTestGen
 from devices.camera import Camera
@@ -83,7 +84,8 @@ class MainWindow(QMainWindow):
 
     def addDeviceForNode(self, node):
         if type(node) == ScreenOutputNode:
-            device = Monitor(node.name, (320,240), (0,0))
+            device = Monitor(node.name, node.size, node.location)
+            device.display = Display(self, device)
 
         if type(node) == VideoTestGenNode:
             device = VideoTestGen(node.name)
