@@ -10,8 +10,8 @@ except ValueError:
 from gi.repository import Gst
 
 class Device(object):
-    DEFAULT_VIDEO_WIDTH = 320
-    DEFAULT_VIDEO_HEIGHT = 240
+    DEFAULT_VIDEO_WIDTH = 640
+    DEFAULT_VIDEO_HEIGHT = 480
     DEFAULT_VIDEO_CAPS = "video/x-raw,format=I420,width=" + \
                             str(DEFAULT_VIDEO_WIDTH) + \
                             ",height=" + \
@@ -34,7 +34,7 @@ class Device(object):
         intervideosrc.set_property('channel', channel)
         self.ports.append(channel)
 
-        intervideosrc.link(device)
+        intervideosrc.link_filtered(device, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
 
     # todo Implement device_pad_name choice
     def add_output_port_on(self, device, device_pad_name="src", port_name="out"):
@@ -46,7 +46,7 @@ class Device(object):
         intervideosink.set_property('channel', channel)
         self.ports.append(channel)
 
-        device.link(intervideosink)
+        device.link_filtered(intervideosink, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
 
     def get_bin(self):
         return self.bin
