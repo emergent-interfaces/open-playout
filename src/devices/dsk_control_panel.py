@@ -26,7 +26,7 @@ class DskControlPanel(ControlPanel):
 
 
     def change_file(self):
-        file_name, selected_filter = QtGui.QFileDialog.getOpenFileName(self, 'Select File', '.', 'SVG Files (*.svg)')
+        file_name, selected_filter = QtGui.QFileDialog.getOpenFileName(self, 'Image File', '.', 'Files (*.svg *.png)')
 
         if file_name:
             self.device.file.set_value(file_name)
