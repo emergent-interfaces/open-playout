@@ -12,7 +12,7 @@ class Display(QtGui.QWidget):
 		self.show()
 
 	def showEvent(self, event):
-		self.monitor.set_window_id(self.winId())
+		self.monitor.set_window_id(self.winId())	
 
 	def set_location(self, x, y):
 		width, height = self.monitor.size.get_value()

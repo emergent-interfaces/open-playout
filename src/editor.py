@@ -129,6 +129,10 @@ class MainWindow(QMainWindow):
         controlPanel = node.device.make_control_panel(self)
         controlPanel.show()
 
+    def closeEvent(self, event):
+        for monitor in self.station.find_devices_by_type(Monitor):
+            monitor.set_window_id(0)   
+
 if __name__ == "__main__":
         editor = Editor()
         sys.exit(editor.start())

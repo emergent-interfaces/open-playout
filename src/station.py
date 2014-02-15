@@ -68,6 +68,9 @@ class Station(object):
 
         return None
 
+    def find_devices_by_type(self, device_type):
+        return [device for device in self.devices if type(device) == device_type]
+
     def run(self):
         self.pipeline.set_state(Gst.State.PLAYING)
 
