@@ -7,6 +7,7 @@ class Display(QtGui.QWidget):
 
 		x, y = monitor.location.get_value()
 		width, height = monitor.size.get_value()
+		self.setWindowTitle(self.monitor.name)
 		self.setGeometry(x, y, width, height)
 		self.show()
 
