@@ -112,6 +112,9 @@ class PlayoutGraphicsScene(QtGui.QGraphicsScene):
             name, ok = QtGui.QInputDialog.getText(self.view, "Create V4L2 Source",
                 "Name:", text=self.freeName("v4l2source"))
 
+            if ok:  
+                self.addNode(V4L2SourceNode(name), position)
+
         if nodeClass == DskNode:
             name, ok = QtGui.QInputDialog.getText(self.view, "Create DSK Source",
                 "Name:", text=self.freeName("dsk"))
