@@ -26,3 +26,9 @@ class ScreenOutputNode(Node):
 		self.size = size
 		self.location = location
 		self.createPort('in')
+
+class DskNode(Node):
+	def __init__(self, name):
+		super(DskNode, self).__init__(name)
+		self.createPort('in', 'in')
+		self.createPort('out', 'out')

@@ -6,7 +6,7 @@ from PySide.QtCore import QPointF
 from node import Node
 from wire import Wire
 from port import Port
-from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
+from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode, DskNode
 from graph_context_menu import GraphContextMenu
 
 # =================================================================
@@ -92,7 +92,7 @@ class PlayoutGraphicsScene(QtGui.QGraphicsScene):
                 "Name:", text=self.freeName("display"))
 
             if ok:
-                self.addNode(ScreenOutputNode(name), position)
+                self.addNode(ScreenOutputNode(name, (320,240), (0,0)), position)
 
         if nodeClass == Switcher4Node:
             name, ok = QtGui.QInputDialog.getText(self.view, "Create 4-Input Switcher",
@@ -112,8 +112,12 @@ class PlayoutGraphicsScene(QtGui.QGraphicsScene):
             name, ok = QtGui.QInputDialog.getText(self.view, "Create V4L2 Source",
                 "Name:", text=self.freeName("v4l2source"))
 
+        if nodeClass == DskNode:
+            name, ok = QtGui.QInputDialog.getText(self.view, "Create DSK Source",
+                "Name:", text=self.freeName("dsk"))
+
             if ok:
-                self.addNode(V4L2SourceNode(name), position) 
+                self.addNode(DskNode(name), position) 
 
     def addNode(self, node, position=QPointF(0,0)):
         node.setPos(position)

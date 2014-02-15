@@ -10,8 +10,9 @@ from devices.monitor import Monitor
 from devices.video_test_gen import VideoTestGen
 from devices.camera import Camera
 from devices.switcher import Switcher
+from devices.dsk import Dsk
 
-from graph.node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
+from graph.node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode, DskNode
 
 class GuiApp():
     def __init__(self):
@@ -95,6 +96,9 @@ class MainWindow(QMainWindow):
 
         if type(node) == Switcher4Node:
             device = Switcher(node.name, 4)
+
+        if type(node) == DskNode:
+            device = Dsk(node.name)
 
         self.station.add_device(device)
         node.device = device           

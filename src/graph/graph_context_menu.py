@@ -1,5 +1,5 @@
 from PySide import QtGui, QtCore
-from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode
+from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode, DskNode
 
 class GraphContextMenu(QtGui.QMenu):
 	def __init__(self, scene, newNodePos):
@@ -30,6 +30,9 @@ class GraphSwitchesMenu(QtGui.QMenu):
 
 		action = self.addAction("4 Input Video Switcher")
 		action.triggered.connect(lambda: scene.addNodeFromMenu(Switcher4Node, newNodePos))
+
+		action = self.addAction("Down Stream Key")
+		action.triggered.connect(lambda: scene.addNodeFromMenu(DskNode, newNodePos))
 
 class GraphDisplayMenu(QtGui.QMenu):
 	def __init__(self, scene, newNodePos):
