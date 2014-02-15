@@ -25,4 +25,4 @@ class Link(Device):
         intervideosink.set_property('channel', channel2)
         self.bin.add(intervideosink)
 
-        intervideosrc.link(intervideosink)
+        intervideosrc.link_filtered(intervideosink, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
