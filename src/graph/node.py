@@ -34,6 +34,7 @@ class Node(QtGui.QGraphicsItem):
     def createPort(self, name, direction='in'):
         port = Port(name, direction)
         self.ports.append(port)
+        self.prepareGeometryChange()
         port.setParentItem(self)
         self.arrangePorts()
         self.sizeBackground()
