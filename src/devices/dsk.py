@@ -15,6 +15,9 @@ except ValueError:
 from gi.repository import Gst
 
 class Dsk(Device):
+    suggested_name = "dsk"
+    suggested_readable_name = "DSK"
+
     def __init__(self, name):
         Device.__init__(self, name)
         self.ControlPanelClass = DskControlPanel

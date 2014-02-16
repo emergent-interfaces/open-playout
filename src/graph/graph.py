@@ -6,7 +6,6 @@ from PySide.QtCore import QPointF
 from node import Node
 from wire import Wire
 from port import Port
-from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode, DskNode
 from graph_context_menu import GraphContextMenu
 
 # =================================================================
@@ -86,41 +85,16 @@ class PlayoutGraphicsScene(QtGui.QGraphicsScene):
     def makeGraph(self):
         self.view.requestGraphDebug.emit()
 
-    def addNodeFromMenu(self, nodeClass, position):
-        if nodeClass == ScreenOutputNode:
-            name, ok = QtGui.QInputDialog.getText(self.view, "Create Screen Display",
-                "Name:", text=self.freeName("display"))
+    def addNodeFromMenu(self, deviceClass, position):
+        name, ok = QtGui.QInputDialog.getText(
+            self.view,
+            "Create " + deviceClass.suggested_readable_name,
+            "Name:",
+            text=self.freeName(deviceClass.suggested_name)
+        )
 
-            if ok:
-                self.addNode(ScreenOutputNode(name, (320,240), (0,0)), position)
-
-        if nodeClass == Switcher4Node:
-            name, ok = QtGui.QInputDialog.getText(self.view, "Create 4-Input Switcher",
-                "Name:", text=self.freeName("switcher"))
-
-            if ok:    
-                self.addNode(Switcher4Node(name), position)
-
-        if nodeClass == VideoTestGenNode:
-            name, ok = QtGui.QInputDialog.getText(self.view, "Create Video Test Generator",
-                "Name:", text=self.freeName("videotestgen"))
-
-            if ok:  
-                self.addNode(VideoTestGenNode(name), position)
-
-        if nodeClass == V4L2SourceNode:
-            name, ok = QtGui.QInputDialog.getText(self.view, "Create V4L2 Source",
-                "Name:", text=self.freeName("v4l2source"))
-
-            if ok:  
-                self.addNode(V4L2SourceNode(name), position)
-
-        if nodeClass == DskNode:
-            name, ok = QtGui.QInputDialog.getText(self.view, "Create DSK Source",
-                "Name:", text=self.freeName("dsk"))
-
-            if ok:
-                self.addNode(DskNode(name), position) 
+        if ok:
+            self.addNode(Node(name, deviceClass), position)
 
     def addNode(self, node, position=QPointF(0,0)):
         node.setPos(position)

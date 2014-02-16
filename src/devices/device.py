@@ -17,6 +17,9 @@ class Device(object):
                             ",height=" + \
                             str(DEFAULT_VIDEO_HEIGHT)
 
+    suggested_name = "device"
+    suggested_readable_name = "Device"
+
     def __init__(self, name):
         self.name = name
         self.bin = Gst.Bin.new(self.name)
@@ -32,7 +35,7 @@ class Device(object):
 
         channel = element_name
         intervideosrc.set_property('channel', channel)
-        self.ports.append(channel)
+        self.register_port(channel, port_name, 'in')
 
         intervideosrc.link_filtered(device, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
 
@@ -44,9 +47,22 @@ class Device(object):
 
         channel = element_name
         intervideosink.set_property('channel', channel)
-        self.ports.append(channel)
+        self.register_port(channel, port_name, 'out')
 
         device.link_filtered(intervideosink, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
+
+    def register_port(self, channel, name, direction):
+        self.ports.append({
+            'channel': channel,
+            'name': name,
+            'direction': direction
+        })
+
+    def input_ports(self):
+        return [port for port in self.ports if port[1] =='in']
+
+    def output_ports(self):
+        return [port for port in self.ports if port[1] =='out']
 
     def get_bin(self):
         return self.bin

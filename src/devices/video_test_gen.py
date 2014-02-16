@@ -15,6 +15,9 @@ from gi.repository import Gst
 
 
 class VideoTestGen(Device):
+    suggested_name = "videotestgen"
+    suggested_readable_name = "Video Test Generator"
+
     def __init__(self, name, pattern=0):
         Device.__init__(self, name)
         self.ControlPanelClass = VideoTestGenControlPanel

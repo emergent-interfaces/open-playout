@@ -15,6 +15,9 @@ from gi.repository import Gst
 
 
 class Switcher(Device):
+    suggested_name = "switcher"
+    suggested_readable_name = "Switcher"
+
     def __init__(self, name, inputs):
         Device.__init__(self, name)
         self.ControlPanelClass = SwitcherControlPanel

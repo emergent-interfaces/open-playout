@@ -12,6 +12,9 @@ from gi.repository import Gst
 
 
 class Camera(Device):
+    suggested_name = "camera"
+    suggested_readable_name = "Camera"
+
     def __init__(self, name):
         Device.__init__(self, name)
 

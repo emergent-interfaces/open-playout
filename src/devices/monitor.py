@@ -14,6 +14,9 @@ from gi.repository import Gst
 
 
 class Monitor(Device):
+    suggested_name = "monitor"
+    suggested_readable_name = "Monitor"
+
     def __init__(self, name, size, location):
         Device.__init__(self, name)
         self.ControlPanelClass = MonitorControlPanel

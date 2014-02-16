@@ -6,9 +6,10 @@ class Node(QtGui.QGraphicsItem):
     NodeTopPadding = 40
     NodeBottomPadding = 20
 
-    def __init__(self, name):
+    def __init__(self, name, deviceClass):
         super(Node, self).__init__()
         self.name = name
+        self.deviceClass = deviceClass
         self.setFlag(QtGui.QGraphicsItem.ItemIsMovable)
         self.setFlag(QtGui.QGraphicsItem.ItemSendsScenePositionChanges)
         self.setFlag(QtGui.QGraphicsItem.ItemIsSelectable)
@@ -30,6 +31,11 @@ class Node(QtGui.QGraphicsItem):
             self.scene().update()
 
         return QtGui.QGraphicsItem.itemChange(self, change, value)
+
+    def setDevice(self, device):
+        self.device = device
+        for port in device.ports:
+            self.createPort(port['name'], port['direction'])
 
     def createPort(self, name, direction='in'):
         port = Port(name, direction)

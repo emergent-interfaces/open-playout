@@ -12,7 +12,7 @@ from devices.camera import Camera
 from devices.switcher import Switcher
 from devices.dsk import Dsk
 
-from graph.node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode, DskNode
+from graph.node import Node
 
 class GuiApp():
     def __init__(self):
@@ -84,24 +84,24 @@ class MainWindow(QMainWindow):
         self.graphWidget.controlPanelRequested.connect(self.makeControlPanel)
 
     def addDeviceForNode(self, node):
-        if type(node) == ScreenOutputNode:
-            device = Monitor(node.name, node.size, node.location)
+        if node.deviceClass == Monitor:
+            device = Monitor(node.name, (320, 240), (0, 0))
             device.display = Display(self, device)
 
-        if type(node) == VideoTestGenNode:
+        if node.deviceClass == VideoTestGen:
             device = VideoTestGen(node.name)
 
-        if type(node) == V4L2SourceNode:
+        if node.deviceClass == Camera:
             device = Camera(node.name)
 
-        if type(node) == Switcher4Node:
+        if node.deviceClass == Switcher:
             device = Switcher(node.name, 4)
 
-        if type(node) == DskNode:
+        if node.deviceClass == Dsk:
             device = Dsk(node.name)
 
         self.station.add_device(device)
-        node.device = device           
+        node.setDevice(device)
 
     def removeDeviceForNode(self, node):
         device = self.station.find_device_by_name(node.name)

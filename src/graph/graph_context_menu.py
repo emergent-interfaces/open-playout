@@ -1,45 +1,29 @@
 from PySide import QtGui, QtCore
-from node_types import VideoTestGenNode, V4L2SourceNode, Switcher4Node, ScreenOutputNode, DskNode
+from devices.video_test_gen import VideoTestGen
+from devices.camera import Camera
+from devices.monitor import Monitor
+from devices.switcher import Switcher
+from devices.dsk import Dsk
+
+from functools import partial
 
 class GraphContextMenu(QtGui.QMenu):
 	def __init__(self, scene, newNodePos):
 		super(GraphContextMenu, self).__init__()
-		self.addMenu(GraphSourcesMenu(scene, newNodePos))
-		self.addMenu(GraphSwitchesMenu(scene, newNodePos))
-		self.addMenu(GraphDisplayMenu(scene, newNodePos))
+		self.addMenu(NewNodeMenu(scene, newNodePos, "Sources", [VideoTestGen, Camera]))
+		self.addMenu(NewNodeMenu(scene, newNodePos, "Switches", [Switcher, Dsk]))
+		self.addMenu(NewNodeMenu(scene, newNodePos, "Outputs", [Monitor]))
+
 		self.addSeparator()
 
 		action = self.addAction("Graph")
 		action.triggered.connect(scene.makeGraph)
 
-class GraphSourcesMenu(QtGui.QMenu):
-	def __init__(self, scene, newNodePos):
-		super(GraphSourcesMenu, self).__init__()
-		self.setTitle('Sources')
-		
-		action = self.addAction("Video Test Generator")
-		action.triggered.connect(lambda: scene.addNodeFromMenu(VideoTestGenNode, newNodePos))
-		
-		action = self.addAction("V4L2 Source")
-		action.triggered.connect(lambda: scene.addNodeFromMenu(V4L2SourceNode, newNodePos))
+class NewNodeMenu(QtGui.QMenu):
+	def __init__(self, scene, newNodePos, title, deviceClasses):
+		super(NewNodeMenu, self).__init__()
+		self.setTitle(title)
 
-class GraphSwitchesMenu(QtGui.QMenu):
-	def __init__(self, scene, newNodePos):
-		super(GraphSwitchesMenu, self).__init__()
-		self.setTitle('Switches')
-
-		action = self.addAction("4 Input Video Switcher")
-		action.triggered.connect(lambda: scene.addNodeFromMenu(Switcher4Node, newNodePos))
-
-		action = self.addAction("Down Stream Key")
-		action.triggered.connect(lambda: scene.addNodeFromMenu(DskNode, newNodePos))
-
-class GraphDisplayMenu(QtGui.QMenu):
-	def __init__(self, scene, newNodePos):
-		super(GraphDisplayMenu, self).__init__()
-		self.setTitle('Outputs')
-
-		action = self.addAction("Screen Display")
-		action.triggered.connect(lambda: scene.addNodeFromMenu(ScreenOutputNode, newNodePos))
-
-		
+		for deviceClass in deviceClasses:
+			action = self.addAction(deviceClass.suggested_readable_name)
+			action.triggered.connect(partial(scene.addNodeFromMenu, deviceClass, newNodePos))
