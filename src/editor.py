@@ -128,6 +128,7 @@ class MainWindow(QMainWindow):
     def makeControlPanel(self, node):
         controlPanel = node.device.make_control_panel(self)
         controlPanel.show()
+        controlPanel.center_at(QtGui.QCursor.pos())
 
     def closeEvent(self, event):
         for monitor in self.station.find_devices_by_type(Monitor):
