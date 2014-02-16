@@ -25,7 +25,7 @@ class GuiApp():
         self.app = QApplication(sys.argv)
         frame = MainWindow(self.station)
         frame.show()
-        self.app.exec_()
+        sys.exit(self.app.exec_())
 
     def exit(self):
         self.app.exit()

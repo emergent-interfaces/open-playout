@@ -18,10 +18,10 @@ print "Loading Configuration"
 # self.graphWidget.scene.addWire('switcher1.prog_out', 'screen1.in')
 # self.graphWidget.scene.addWire('switcher1.prev_out', 'screen2.in')
 
-# # Overlay test
-# self.graphWidget.scene.addNode(VideoTestGenNode("video1"), QtCore.QPointF(100,100))
-# node = self.graphWidget.scene.addNode(DskNode("dsk1"), QtCore.QPointF(300,100))
-# node.device.file.set_value('../media/lower_third.svg')
-# self.graphWidget.scene.addNode(ScreenOutputNode("screen1", (320,240), (0,0)), QtCore.QPointF(500,100))
-# self.graphWidget.scene.addWire('video1.out', 'dsk1.in')
-# self.graphWidget.scene.addWire('dsk1.out', 'screen1.in')
+# Overlay test
+self.graphWidget.scene.addNode(VideoTestGenNode("video1"), QtCore.QPointF(100,100))
+node = self.graphWidget.scene.addNode(DskNode("dsk1"), QtCore.QPointF(300,100))
+node.device.file.set_value('../media/lower_third.svg')
+self.graphWidget.scene.addNode(ScreenOutputNode("screen1", (320,240), (0,0)), QtCore.QPointF(500,100))
+self.graphWidget.scene.addWire('video1.out', 'dsk1.in')
+self.graphWidget.scene.addWire('dsk1.out', 'screen1.in')

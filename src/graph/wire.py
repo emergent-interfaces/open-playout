@@ -35,15 +35,13 @@ class Wire(QtGui.QGraphicsItem):
         return True
 
     def setPort2(self, port2):
+        self.prepareGeometryChange()
         self.port2 = port2
         self.linked = True
-        self.prepareGeometryChange()
-        self.update()
 
     def setTemporaryEndpoint(self, temporaryEndpoint):
-        self.temporaryEndpoint = temporaryEndpoint
         self.prepareGeometryChange()
-        self.update()
+        self.temporaryEndpoint = temporaryEndpoint
 
     def boundingRect(self):
         self.bounds = self.path().boundingRect()
