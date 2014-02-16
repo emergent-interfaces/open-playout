@@ -28,6 +28,8 @@ class Node(QtGui.QGraphicsItem):
 
     def itemChange(self, change, value):
         if change == QtGui.QGraphicsItem.ItemPositionChange and self.scene():
+            for wire in self.wires():
+                wire.prepareGeometryChange()
             self.scene().update()
 
         return QtGui.QGraphicsItem.itemChange(self, change, value)
