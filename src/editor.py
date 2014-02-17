@@ -83,6 +83,13 @@ class MainWindow(QMainWindow):
         self.graphWidget.requestGraphDebug.connect(self.makeGraphDebug)
         self.graphWidget.controlPanelRequested.connect(self.makeControlPanel)
 
+    def install(self, deviceClass, name, (x,y)):
+        node = self.graphWidget.scene.addNode(Node(name, deviceClass), QtCore.QPointF(x,y))
+        return node.device, node
+
+    def wire(self, channel1, channel2):
+        self.graphWidget.scene.addWire(channel1, channel2)
+
     def addDeviceForNode(self, node):
         if node.deviceClass == Monitor:
             device = Monitor(node.name, (320, 240), (0, 0))

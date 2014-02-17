@@ -1,28 +1,27 @@
 print "Loading Configuration"
 
 # # Simple test
-# self.graphWidget.scene.addNode(Node("video1", VideoTestGen), QtCore.QPointF(100,100))
-# self.graphWidget.scene.addNode(Node("screen1", Monitor), QtCore.QPointF(300,100))
-# self.graphWidget.scene.addWire('video1.out', 'screen1.in')
+# self.install(VideoTestGen, "video1", (100, 100))
+# self.install(Monitor, "screen1", (300, 100))
+# self.wire('video1.out', 'screen1.in')
 
-# # Switcher control panel test
-self.graphWidget.scene.addNode(Node("video1", VideoTestGen), QtCore.QPointF(0,0))
-v1 = self.graphWidget.scene.addNode(Node("video2", VideoTestGen), QtCore.QPointF(0,100))
-v1.device.pattern.set_value(1)
-self.graphWidget.scene.addNode(Node("switcher1", Switcher), QtCore.QPointF(200,0))
-self.graphWidget.scene.addNode(Node("screen1", Monitor), QtCore.QPointF(400,0))
-node = self.graphWidget.scene.addNode(Node("screen2", Monitor), QtCore.QPointF(400,100))
-node.device.location.set_value((330, 0))
+# Switcher control panel test
+self.install(VideoTestGen, "video1", (0,0))
+d, n = self.install(VideoTestGen, "video2", (0,100))
+d.pattern.set_value(1)
+self.install(Switcher, "switcher1", (200,0))
+self.install(Monitor, "program", (400,0))
+d, n = self.install(Monitor, "preview", (400,100))
+d.location.set_value((330, 0))
+self.wire('video1.out', 'switcher1.in1')
+self.wire('video2.out', 'switcher1.in2')
+self.wire('switcher1.prog_out', 'program.in')
+self.wire('switcher1.prev_out', 'preview.in')
 
-self.graphWidget.scene.addWire('video1.out', 'switcher1.in1')
-self.graphWidget.scene.addWire('video2.out', 'switcher1.in2')
-self.graphWidget.scene.addWire('switcher1.prog_out', 'screen1.in')
-self.graphWidget.scene.addWire('switcher1.prev_out', 'screen2.in')
-
-# Overlay test
-# self.graphWidget.scene.addNode(Node("video1", VideoTestGen), QtCore.QPointF(100,100))
-# node = self.graphWidget.scene.addNode(Node("dsk1", Dsk), QtCore.QPointF(300,100))
-# node.device.file.set_value('../media/lower_third.svg')
-# self.graphWidget.scene.addNode(Node("screen1", Monitor), QtCore.QPointF(500,100))
-# self.graphWidget.scene.addWire('video1.out', 'dsk1.in')
-# self.graphWidget.scene.addWire('dsk1.out', 'screen1.in')
+# # Overlay test
+# self.install(VideoTestGen, "video1", (100, 100))
+# d, n = self.install(Dsk, "dsk1", (300, 100))
+# d.file.set_value('../media/lower_third.svg')
+# self.install(Monitor, "screen1", (500, 100))
+# self.wire('video1.out', 'dsk1.in')
+# self.wire('dsk1.out', 'screen1.in')
