@@ -1,12 +1,12 @@
 Open Playout
 ============
 An open source playout and live compositing tool.  This might be the
-third time I've rebooted this project.  Sorry to anyone who's had any
+fourth time I've rebooted this project.  Sorry to anyone who's had any
 hope in the previous versions.
 
 Setting Up Development System
 =============================
-These instructions are applicable to Ubuntu 12.04.  They are heavily borrowed
+These instructions are applicable to Ubuntu 13.10.  They are heavily borrowed
 from the [Novacut wiki](https://wiki.ubuntu.com/Novacut/GStreamer1.0#Adding_PPA_for_Ubuntu_Precise).
 
     sudo apt-add-repository ppa:gstreamer-developers/ppa
@@ -21,67 +21,35 @@ from the [Novacut wiki](https://wiki.ubuntu.com/Novacut/GStreamer1.0#Adding_PPA_
         gstreamer1.0-plugins-bad \
         gstreamer1.0-libav
 
+You'll also need QT and PySide.  If you are using a debugger like gdb, you'll want to install the debug symbols for each library.
+
 Designing a Station
 ===================
-The config.json file is used to design your station's initial setup.  A station is built by linking various devices together by patches.  An empty configuration follows:
+Right click on the gray canvas to add devices to your station.  Drag wires from port to port to connect devices.  In lieu of any sort of save file, there is a `config.py` that is executed at start-up where you can construct a station manually.  For example:
 
-    {
-        "devices": [],
-        "patches": []
-    }
+    self.install(VideoTestGen, "video1", (100, 100))
+    self.install(Monitor, "screen1", (300, 100))
+    self.wire('video1.out', 'screen1.in')
 
-Devices are specified as dictionaries containing their setup details.  For example:
+Install a device by providing a device class, device name, and location on the station canvas.  The configuration file is simply executed by Python, so it exposes all the functionality of the devices.  Each install returns the device and node (visual representation of the device on the canvas) which can be used.  For example:
 
-    {"type": "deck", "name": "main_deck"}
-
-All device dictionaries must specifiy at least a device type and name.  Most devices require additional parameters to be specified.
-
-To connect devices, patch dictionaries specifiy connections in the form `device_name.device_port`.  For example:
-
-    {"src": "deck1.src", "sink": "program_monitor.sink"}
+    self.install(VideoTestGen, "video1", (100, 100))
+    d, n = self.install(Dsk, "dsk1", (300, 100))
+    d.file.set_value('../media/lower_third.svg')
+    self.install(Monitor, "screen1", (500, 100))
+    self.wire('video1.out', 'dsk1.in')
+    self.wire('dsk1.out', 'screen1.in')
 
 Devices
 =======
-These devices are working, functional to some extent, patently broken, drafts, or ideas threatening to become any of those previous options.  Also, you would think that parameters that aren't the most basic ones would have defaults if they aren't specified.  That's probably not the case right now.
+A limited set of devices are functional to some extent.  The current devices are:
 
-Monitor
--------
-* type:     "monitor"
-* name
-* size:     For a windowed monitor, width and height in the format "widthxheight" like "320x240".
-            For a fullscreen window, specify "full".
-* location: The offset from top and left of the primary display in the format "widthxheight".
+* Camera - presents the output of a V4L2 source
+* Dsk - down stream key to overlay a PNG or SVG file
+* Monitor - output to send video to a window or screen
+* Switcher - choose between a set of video streams
+* VideoTestGen - generates a test video pattern
 
-Camera
-------
-* type:     "camera"
-* name
-
-Deck
-----
-* type:     "deck"
-* name
-
-VideoTestGen
-------------
-* type:     "video_test_gen"
-* name
-* pattern:  Integer corresponding to [GstVideoTestSrcPattern](http://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-base-plugins/html/gst-plugins-base-plugins-videotestsrc.html#GstVideoTestSrcPattern).  Defaults to 0.
-
-Switcher
---------
-* type:     "switcher"
-* name
-* inputs:   Number of inputs to switch between
-
-Mixer
------
-Not started
-
-Character Generator
--------------------
-Not started
-
-Audio Output
-------------
-Not started
+Creating New Devices
+--------------------
+A device is just a Gstreamer `bin` where the inputs and outputs are presented by the `inter` series of elements.  This allows plugging components together at run-time without crashing the pipeline.
