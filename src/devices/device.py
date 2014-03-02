@@ -67,6 +67,9 @@ class Device(object):
     def get_bin(self):
         return self.bin
 
+    def prepare_for_removal(self):
+        self.set_null()
+
     def set_playing(self):
         self.bin.set_state(Gst.State.PLAYING)
 

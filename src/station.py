@@ -37,7 +37,7 @@ class Station(object):
         device.set_playing()
 
     def remove_device(self, device):
-        device.set_null()
+        device.prepare_for_removal()
         self.pipeline.remove(device.get_bin())
         self.devices.remove(device)
 

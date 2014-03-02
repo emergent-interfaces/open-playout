@@ -1,9 +1,9 @@
 print "Loading Configuration"
 
-# # Simple test
-# self.install(VideoTestGen, "video1", (100, 100))
-# self.install(Monitor, "screen1", (300, 100))
-# self.wire('video1.out', 'screen1.in')
+# Simple test
+self.install(VideoTestGen, "video1", (100, 100))
+self.install(Monitor, "screen1", (300, 100))
+self.wire('video1.out', 'screen1.in')
 
 # Switcher control panel test
 # self.install(VideoTestGen, "video1", (0,0))
@@ -26,7 +26,7 @@ print "Loading Configuration"
 # self.wire('video1.out', 'dsk1.in')
 # self.wire('dsk1.out', 'screen1.in')
 
-# UStream Test
-self.install(VideoTestGen, "video1", (100, 100))
-self.install(UstreamProvider, "ustream_provider1", (300, 100))
-self.wire('video1.out', 'ustream_provider1.in')
+# # UStream Test
+# self.install(VideoTestGen, "video1", (100, 100))
+# self.install(UstreamProvider, "ustream_provider1", (300, 100))
+# self.wire('video1.out', 'ustream_provider1.in')

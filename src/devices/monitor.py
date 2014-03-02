@@ -52,3 +52,9 @@ class Monitor(Device):
 
     def change_location(self):
         self.display.set_location(*self.location.get_value())
+
+    def prepare_for_removal(self):
+        super(Monitor, self).prepare_for_removal()
+        
+        if self.display:
+            self.display.close()
