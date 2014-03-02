@@ -4,6 +4,7 @@ from devices.camera import Camera
 from devices.monitor import Monitor
 from devices.switcher import Switcher
 from devices.dsk import Dsk
+from devices.ustream_provider import UstreamProvider
 
 from functools import partial
 
@@ -12,7 +13,7 @@ class GraphContextMenu(QtGui.QMenu):
 		super(GraphContextMenu, self).__init__()
 		self.addMenu(NewNodeMenu(scene, newNodePos, "Sources", [VideoTestGen, Camera]))
 		self.addMenu(NewNodeMenu(scene, newNodePos, "Switches", [Switcher, Dsk]))
-		self.addMenu(NewNodeMenu(scene, newNodePos, "Outputs", [Monitor]))
+		self.addMenu(NewNodeMenu(scene, newNodePos, "Outputs", [Monitor, UstreamProvider]))
 
 		self.addSeparator()
 

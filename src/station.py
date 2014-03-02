@@ -12,7 +12,7 @@ from gi.repository import Gst, GstVideo
 class Station(object):
     def __init__(self, config, args):
 
-        os.environ["GST_DEBUG"] = "2"
+        os.environ["GST_DEBUG"] = "4"
         Gst.init(None)
 
         self.pipeline = Gst.Pipeline()

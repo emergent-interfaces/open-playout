@@ -11,8 +11,19 @@ from devices.video_test_gen import VideoTestGen
 from devices.camera import Camera
 from devices.switcher import Switcher
 from devices.dsk import Dsk
+from devices.ustream_provider import UstreamProvider
 
 from graph.node import Node
+
+import gi
+
+try:
+    gi.require_version('Gst', '1.0')
+except ValueError:
+    print 'Could not find required Gstreamer library'
+    sys.exit(1)
+
+from gi.repository import Gst
 
 class GuiApp():
     def __init__(self):
@@ -106,6 +117,9 @@ class MainWindow(QMainWindow):
 
         if node.deviceClass == Dsk:
             device = Dsk(node.name)
+
+        if node.deviceClass == UstreamProvider:
+            device = UstreamProvider(node.name)
 
         self.station.add_device(device)
         node.setDevice(device)
