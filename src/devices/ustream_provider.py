@@ -2,7 +2,7 @@ import gi
 import sys
 from device import Device
 from observable_variable import ObservableVariable
-from ustream_provider_control_panel import UstreamProviderControlPanel
+from control_panels.ustream_provider_control_panel import UstreamProviderControlPanel
 
 try:
     gi.require_version('Gst', '1.0')

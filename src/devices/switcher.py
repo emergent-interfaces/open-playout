@@ -3,7 +3,7 @@ import sys
 from device import Device
 from observable_variable import ObservableVariable
 
-from switcher_control_panel import SwitcherControlPanel
+from control_panels.switcher_control_panel import SwitcherControlPanel
 
 try:
     gi.require_version('Gst', '1.0')

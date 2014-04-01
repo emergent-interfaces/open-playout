@@ -4,7 +4,7 @@ import sys
 import cairo
 from device import Device
 from observable_variable import ObservableVariable
-from dsk_control_panel import DskControlPanel
+from control_panels.dsk_control_panel import DskControlPanel
 
 try:
     gi.require_version('Gst', '1.0')

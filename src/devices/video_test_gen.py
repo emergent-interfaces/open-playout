@@ -3,7 +3,7 @@ import sys
 from device import Device
 from observable_variable import ObservableVariable
 
-from video_test_gen_control_panel import VideoTestGenControlPanel
+from control_panels.video_test_gen_control_panel import VideoTestGenControlPanel
 
 try:
     gi.require_version('Gst', '1.0')

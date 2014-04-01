@@ -2,7 +2,7 @@ import gi
 import sys
 from device import Device
 from observable_variable import ObservableVariable
-from monitor_control_panel import MonitorControlPanel
+from control_panels.monitor_control_panel import MonitorControlPanel
 
 try:
     gi.require_version('Gst', '1.0')
