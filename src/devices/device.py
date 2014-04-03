@@ -9,13 +9,14 @@ except ValueError:
 
 from gi.repository import Gst
 
+
 class Device(object):
     DEFAULT_VIDEO_WIDTH = 640
     DEFAULT_VIDEO_HEIGHT = 480
     DEFAULT_VIDEO_CAPS = "video/x-raw,format=I420,width=" + \
-                            str(DEFAULT_VIDEO_WIDTH) + \
-                            ",height=" + \
-                            str(DEFAULT_VIDEO_HEIGHT)
+                         str(DEFAULT_VIDEO_WIDTH) + \
+                         ",height=" + \
+                         str(DEFAULT_VIDEO_HEIGHT)
 
     suggested_name = "device"
     suggested_readable_name = "Device"
@@ -59,10 +60,10 @@ class Device(object):
         })
 
     def input_ports(self):
-        return [port for port in self.ports if port[1] =='in']
+        return [port for port in self.ports if port[1] == 'in']
 
     def output_ports(self):
-        return [port for port in self.ports if port[1] =='out']
+        return [port for port in self.ports if port[1] == 'out']
 
     def get_bin(self):
         return self.bin
@@ -92,9 +93,6 @@ class Device(object):
             return True
         else:
             return False
-
-    def make_control_panel(self, panel):
-        print 'Please implement make_control_panel for this device.'
 
     def make_control_panel(self, parent):
         panel = self.ControlPanelClass(self, parent)
