@@ -12,6 +12,8 @@ from devices.camera import Camera
 from devices.switcher import Switcher
 from devices.dsk import Dsk
 from devices.ustream_provider import UstreamProvider
+from devices.audio_out import AudioOut
+from devices.audio_test_gen import AudioTestGen
 
 from graph.node import Node
 
@@ -121,6 +123,12 @@ class MainWindow(QMainWindow):
         if node.deviceClass == UstreamProvider:
             device = UstreamProvider(node.name)
 
+        if node.deviceClass == AudioOut:
+            device = AudioOut(node.name)
+
+        if node.deviceClass == AudioTestGen:
+            device = AudioTestGen(node.name)
+
         self.station.add_device(device)
         node.setDevice(device)
 
@@ -131,7 +139,7 @@ class MainWindow(QMainWindow):
     def addLinkForWire(self, wire):
         port1_name = wire.port1.fullName()
         port2_name = wire.port2.fullName()
-        self.station.link("-".join([port1_name, port2_name]), port1_name, port2_name)
+        self.station.link("-".join([port1_name, port2_name]), port1_name, port2_name, wire.media_type)
 
     def removeLinkForWire(self, wire):
         self.station.unlink(wire.port1.fullName(), wire.port2.fullName())

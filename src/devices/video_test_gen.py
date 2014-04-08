@@ -47,7 +47,7 @@ class VideoTestGen(Device):
         self.text_overlay.link(self.convert)
         self.convert.link(self.caps_filter)
 
-        self.add_output_port_on(self.caps_filter, "src")
+        self.add_output_video_port_on(self.caps_filter, "src")
 
     def change_pattern(self):
         self.src.set_property('pattern', self.pattern.get_value())

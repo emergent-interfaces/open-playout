@@ -31,7 +31,7 @@ class Camera(Device):
         self.src.link(self.convert)
         self.convert.link(self.caps_filter)
 
-        self.add_output_port_on(self.caps_filter, "src")
+        self.add_output_video_port_on(self.caps_filter, "src")
 
         # pad = self.text_overlay.get_static_pad("src")
         # ghost_pad = Gst.GhostPad.new("src", pad)

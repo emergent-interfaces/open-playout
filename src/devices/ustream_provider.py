@@ -62,7 +62,7 @@ class UstreamProvider(Device):
         self.flvmux_queue.link(self.rtmpsink)
 
         # Add ports
-        self.add_input_port_on(self.video_input_queue, "sink")
+        self.add_input_video_port_on(self.video_input_queue, "sink")
 
     def change_url_and_key(self, url_and_key):
         self.flvmux_queue.get_static_pad('src').add_probe(

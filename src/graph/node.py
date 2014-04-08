@@ -37,10 +37,10 @@ class Node(QtGui.QGraphicsItem):
     def setDevice(self, device):
         self.device = device
         for port in device.ports:
-            self.createPort(port['name'], port['direction'])
+            self.createPort(port['name'], port['media_type'], port['direction'])
 
-    def createPort(self, name, direction='in'):
-        port = Port(name, direction)
+    def createPort(self, name, media_type, direction='in'):
+        port = Port(name, media_type, direction)
         self.ports.append(port)
         self.prepareGeometryChange()
         port.setParentItem(self)

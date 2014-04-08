@@ -1,9 +1,9 @@
 print "Loading Configuration"
 
 # Simple test
-self.install(VideoTestGen, "video1", (100, 100))
-self.install(Monitor, "screen1", (300, 100))
-self.wire('video1.out', 'screen1.in')
+# self.install(VideoTestGen, "video1", (100, 100))
+# self.install(Monitor, "screen1", (300, 100))
+# self.wire('video1.out', 'screen1.in')
 
 # Switcher control panel test
 # self.install(VideoTestGen, "video1", (0,0))
@@ -30,3 +30,8 @@ self.wire('video1.out', 'screen1.in')
 # self.install(VideoTestGen, "video1", (100, 100))
 # self.install(UstreamProvider, "ustream_provider1", (300, 100))
 # self.wire('video1.out', 'ustream_provider1.in')
+
+# # Audio Test
+self.install(AudioTestGen, "testgen1", (100, 100))
+self.install(AudioOut, "audioout1", (300, 100))
+self.wire('testgen1.out', 'audioout1.in')

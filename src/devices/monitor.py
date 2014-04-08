@@ -39,7 +39,7 @@ class Monitor(Device):
         self.convert.link_filtered(self.scale, caps)
         self.scale.link(self.sink)
 
-        self.add_input_port_on(self.convert)
+        self.add_input_video_port_on(self.convert)
         
     def get_sink(self):
         return self.sink

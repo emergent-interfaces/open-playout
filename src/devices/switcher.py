@@ -34,8 +34,8 @@ class Switcher(Device):
         self.bin.add(self.prev_mixer)
 
         # Add outputs for static mixer pads
-        self.add_output_port_on(self.prog_mixer, "src", "prog_out")
-        self.add_output_port_on(self.prev_mixer, "src", "prev_out")
+        self.add_output_video_port_on(self.prog_mixer, "src", "prog_out")
+        self.add_output_video_port_on(self.prev_mixer, "src", "prev_out")
 
         for input_id in range(inputs):
             # Create tee and create input
@@ -44,7 +44,7 @@ class Switcher(Device):
 
             name = "in" + str(input_id + 1)
 
-            self.add_input_port_on(tee, name, name)
+            self.add_input_video_port_on(tee, name, name)
 
             #pad = Gst.GhostPad.new(name, tee.get_static_pad("sink"))
             #self.bin.add_pad(pad)

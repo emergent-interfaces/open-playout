@@ -4,10 +4,11 @@ from wire import Wire
 class Port(QtGui.QGraphicsItem):
     PortHeight = 20
 
-    def __init__(self, name, direction='in'):
+    def __init__(self, name, media_type, direction='in'):
         super(Port, self).__init__()
         self.setAcceptHoverEvents(True)
         self.hovered = False
+        self.media_type = media_type
 
         self.direction = direction
         self.name = name

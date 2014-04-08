@@ -40,8 +40,8 @@ class Dsk(Device):
         # self.convert1.link(self.overlay)
         # self.overlay.link(self.convert2)
 
-        self.add_input_port_on(self.overlay)
-        self.add_output_port_on(self.overlay)
+        self.add_input_video_port_on(self.overlay)
+        self.add_output_video_port_on(self.overlay)
 
         #self.overlay.connect("draw", self.draw)
 

@@ -52,7 +52,7 @@ class GraphWidget(QtGui.QGraphicsView):
         if event.key() == QtCore.Qt.Key_Delete:
             items = self.scene.selectedItems()
             for item in items:
-                item.delete()                                  
+                item.delete()
 
     # Generic function available on QGraphicsScene to perform signal emits from
     # the QGraphicsView
@@ -72,6 +72,7 @@ class GraphWidget(QtGui.QGraphicsView):
         if action == "show":
             if isinstance(object, Node):
                 self.controlPanelRequested.emit(object)
+
 
 class PlayoutGraphicsScene(QtGui.QGraphicsScene):
     def __init__(self, view):
@@ -96,11 +97,11 @@ class PlayoutGraphicsScene(QtGui.QGraphicsScene):
         if ok:
             self.addNode(Node(name, deviceClass), position)
 
-    def addNode(self, node, position=QPointF(0,0)):
+    def addNode(self, node, position=QPointF(0, 0)):
         node.setPos(position)
         self.addItem(node)
         self.view.notifyView('add', node)
-        
+
         return node
 
     def addWire(self, portFullName1, portFullName2):

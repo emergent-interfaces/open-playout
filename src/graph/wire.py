@@ -14,6 +14,8 @@ class Wire(QtGui.QGraphicsItem):
             self.linked = False
             self.setTemporaryEndpoint(self.port1.scenePos())
 
+        self.updateMediaType()
+
         self.setZValue(-1)
 
         wireBrush = QtGui.QBrush(QtGui.QColor(157,157,157), QtCore.Qt.SolidPattern)
@@ -32,7 +34,13 @@ class Wire(QtGui.QGraphicsItem):
         if self.port1.direction == self.port2.direction:
             return False
 
+        if self.port1.media_type != self.port2.media_type:
+            return False
+
         return True
+
+    def updateMediaType(self):
+        self.media_type = self.port1.media_type
 
     def setPort2(self, port2):
         self.prepareGeometryChange()

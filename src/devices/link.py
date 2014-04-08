@@ -12,17 +12,26 @@ from gi.repository import Gst
 
 
 class Link(Device):
-    def __init__(self, name, channel1, channel2):
+    def __init__(self, name, channel1, channel2, media_type):
         Device.__init__(self, name)
 
-        intervideosrc = Gst.ElementFactory.make('intervideosrc', None)
+        if media_type == 'video':
+            intersrc = 'intervideosrc'
+            intersink = 'intervideosink'
+            intercaps = self.DEFAULT_VIDEO_CAPS
+        else:
+            intersrc = 'interaudiosrc'
+            intersink = 'interaudiosink'
+            intercaps = self.DEFAULT_AUDIO_CAPS
+
+        src = Gst.ElementFactory.make(intersrc, None)
         self.port_1 = channel1
-        intervideosrc.set_property('channel', channel1)
-        self.bin.add(intervideosrc)
+        src.set_property('channel', channel1)
+        self.bin.add(src)
 
-        intervideosink = Gst.ElementFactory.make('intervideosink', None)
+        sink = Gst.ElementFactory.make(intersink, None)
         self.port_2 = channel2
-        intervideosink.set_property('channel', channel2)
-        self.bin.add(intervideosink)
+        sink.set_property('channel', channel2)
+        self.bin.add(sink)
 
-        intervideosrc.link_filtered(intervideosink, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
+        src.link_filtered(sink, Gst.caps_from_string(intercaps))

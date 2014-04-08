@@ -12,7 +12,7 @@ from gi.repository import Gst, GstVideo
 class Station(object):
     def __init__(self, config, args):
 
-        os.environ["GST_DEBUG"] = "4"
+        os.environ["GST_DEBUG"] = "3"
         Gst.init(None)
 
         self.pipeline = Gst.Pipeline()
@@ -41,9 +41,9 @@ class Station(object):
         self.pipeline.remove(device.get_bin())
         self.devices.remove(device)
 
-    def link(self, name, port_1, port_2):
-        link = Link(name, port_1, port_2)
-        print "Linking:", port_1, port_2
+    def link(self, name, port_1, port_2, media_type):
+        link = Link(name, port_1, port_2, media_type)
+        print "Linking:", port_1, port_2, "(" + media_type + ")"
         self.pipeline.add(link.get_bin())
         link.set_playing()
         self.links.append(link)
@@ -59,7 +59,7 @@ class Station(object):
             if link.port_1 == port_1 and link.port_2 == port_2:
                 return link
 
-        return None        
+        return None
 
     def find_device_by_name(self, name):
         for device in self.devices:
