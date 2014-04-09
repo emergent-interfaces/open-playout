@@ -19,8 +19,12 @@ class Device(object):
                          str(DEFAULT_VIDEO_HEIGHT)
 
     DEFAULT_AUDIO_CHANNELS = 2
-    DEFAULT_AUDIO_CAPS = "audio/x-raw,channels=" + \
-                         str(DEFAULT_AUDIO_CHANNELS)
+    DEFAULT_AUDIO_CAPS = "audio/x-raw,channels=(int)" + \
+                         str(DEFAULT_AUDIO_CHANNELS) + \
+                         ",rate=(int)48000"
+
+    SINGLE_CHANNEL_AUDIO_CAPS = "audio/x-raw,channels=(int)1" + \
+                                ",rate=(int)48000"
 
     suggested_name = "device"
     suggested_readable_name = "Device"
