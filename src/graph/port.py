@@ -1,6 +1,7 @@
 from PySide import QtGui, QtCore
 from wire import Wire
 
+
 class Port(QtGui.QGraphicsItem):
     PortHeight = 20
 
@@ -14,8 +15,10 @@ class Port(QtGui.QGraphicsItem):
         self.name = name
 
         self.brushes = {}
-        self.brushes['background'] = QtGui.QBrush(QtGui.QColor(157,157,157), QtCore.Qt.SolidPattern)
-        self.brushes['backgroundHovered'] = QtGui.QBrush(QtGui.QColor(200,120,10), QtCore.Qt.SolidPattern)
+        self.brushes['background'] = QtGui.QBrush(QtGui.QColor(157, 157, 157),
+                                                  QtCore.Qt.SolidPattern)
+        self.brushes['backgroundHovered'] = QtGui.QBrush(QtGui.QColor(200, 120, 10),
+                                                         QtCore.Qt.SolidPattern)
 
     def fullName(self):
         return self.parentItem().name + "." + self.name
@@ -29,10 +32,10 @@ class Port(QtGui.QGraphicsItem):
 
         if self.direction == "in":
             self.bounds = QtCore.QRectF(-5 - penWidth / 2, -nameHeight/2,
-                15 + nameWidth, nameHeight)
+                                        15 + nameWidth, nameHeight)
         else:
             self.bounds = QtCore.QRectF(-10 - nameWidth - penWidth / 2, -nameHeight/2,
-                15 + nameWidth, nameHeight)
+                                        15 + nameWidth, nameHeight)
 
         return self.bounds
 
@@ -56,7 +59,6 @@ class Port(QtGui.QGraphicsItem):
             painter.drawText(-10 - nameWidth, nameHeight/2 - 2, self.name)
         #painter.drawEllipse(10, nameHeight/2,1,1)
         #painter.drawEllipse(10, -nameHeight/2,1,1)
-
 
     def hoverEnterEvent(self, event):
         self.hovered = True
@@ -88,7 +90,7 @@ class Port(QtGui.QGraphicsItem):
         else:
             self.scene().removeItem(self.temporaryWire)
             del self.temporaryWire
-        
+
         self.temporaryWire = None
         self.scene().update()
 
