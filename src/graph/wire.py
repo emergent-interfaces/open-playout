@@ -1,5 +1,6 @@
 from PySide import QtGui, QtCore
 
+
 class Wire(QtGui.QGraphicsItem):
     def __init__(self, port1, port2=None):
         super(Wire, self).__init__()
@@ -71,7 +72,7 @@ class Wire(QtGui.QGraphicsItem):
         #painter.drawRect(self.bounds)
 
         painter.setPen(self.pens['wireSheath'])
-        painter.drawPath(self.path())        
+        painter.drawPath(self.path())
 
         if self.isSelected():
             painter.setPen(self.pens['wireSelected'])
@@ -82,7 +83,7 @@ class Wire(QtGui.QGraphicsItem):
 
     def path(self):
         # determine the QPainterPath for this wire and use this for painting
-        # and bounds calculation        
+        # and bounds calculation
         wirePath = QtGui.QPainterPath()
 
         if self.linked:
@@ -100,17 +101,17 @@ class Wire(QtGui.QGraphicsItem):
         else:
             c1 = QtCore.QPoint(x1-abs(x2-x1)*0.50, y1)
             c2 = QtCore.QPoint(x2+abs(x2-x1)*0.50, y2)
-        
+
         end = QtCore.QPoint(x2, y2)
 
         wirePath.cubicTo(c1, c2, end)
-
 
         return wirePath
 
     def delete(self):
         self.scene().notifyView('remove', self)
         self.scene().removeItem(self)
+
 
 def expand_qrect(qrect, amount):
     qrect.adjust(-amount, -amount, amount, amount)
