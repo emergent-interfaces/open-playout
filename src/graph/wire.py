@@ -18,9 +18,14 @@ class Wire(QtGui.QGraphicsItem):
 
         self.setZValue(-1)
 
-        wireBrush = QtGui.QBrush(QtGui.QColor(157,157,157), QtCore.Qt.SolidPattern)
-        wireSelected = QtGui.QBrush(QtGui.QColor(200,120,10), QtCore.Qt.SolidPattern)
-        wireSheath = QtGui.QBrush(QtGui.QColor(0,0,0), QtCore.Qt.SolidPattern)
+        wireBrush = QtGui.QBrush(QtGui.QColor(157, 157, 157), QtCore.Qt.SolidPattern)
+
+        if self.media_type == "video":
+            wireSelected = QtGui.QBrush(QtGui.QColor(200, 120, 10), QtCore.Qt.SolidPattern)
+        elif self.media_type == "audio":
+            wireSelected = QtGui.QBrush(QtGui.QColor(120, 120, 255), QtCore.Qt.SolidPattern)
+
+        wireSheath = QtGui.QBrush(QtGui.QColor(0, 0, 0), QtCore.Qt.SolidPattern)
 
         self.pens = {}
         self.pens['wire'] = QtGui.QPen(wireBrush, 3)

@@ -15,10 +15,17 @@ class Port(QtGui.QGraphicsItem):
         self.name = name
 
         self.brushes = {}
-        self.brushes['background'] = QtGui.QBrush(QtGui.QColor(157, 157, 157),
-                                                  QtCore.Qt.SolidPattern)
-        self.brushes['backgroundHovered'] = QtGui.QBrush(QtGui.QColor(200, 120, 10),
-                                                         QtCore.Qt.SolidPattern)
+
+        if self.media_type == "video":
+            self.brushes['bkg'] = QtGui.QBrush(QtGui.QColor(157, 157, 157),
+                                               QtCore.Qt.SolidPattern)
+            self.brushes['bkgHover'] = QtGui.QBrush(QtGui.QColor(200, 120, 10),
+                                                    QtCore.Qt.SolidPattern)
+        elif self.media_type == "audio":
+            self.brushes['bkg'] = QtGui.QBrush(QtGui.QColor(157, 157, 200),
+                                               QtCore.Qt.SolidPattern)
+            self.brushes['bkgHover'] = QtGui.QBrush(QtGui.QColor(157, 157, 255),
+                                                    QtCore.Qt.SolidPattern)
 
     def fullName(self):
         return self.parentItem().name + "." + self.name
@@ -47,9 +54,9 @@ class Port(QtGui.QGraphicsItem):
         nameHeight = fm.height()
 
         if self.hovered:
-            painter.setBrush(self.brushes['backgroundHovered'])
+            painter.setBrush(self.brushes['bkgHover'])
         else:
-            painter.setBrush(self.brushes['background'])
+            painter.setBrush(self.brushes['bkg'])
         #painter.drawEllipse(0,0,1,1)
         painter.drawEllipse(-5, -5, 10, 10)
 
