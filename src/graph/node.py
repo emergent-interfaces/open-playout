@@ -2,6 +2,7 @@ from PySide import QtGui, QtCore
 from port import Port
 from wire import Wire
 
+
 class Node(QtGui.QGraphicsItem):
     NodeTopPadding = 40
     NodeBottomPadding = 20
@@ -17,9 +18,10 @@ class Node(QtGui.QGraphicsItem):
         self.ports = []
 
         self.brushes = {}
-        self.brushes['background'] = QtGui.QBrush(QtGui.QColor(107,107,107), QtCore.Qt.SolidPattern)
+        self.brushes['background'] = QtGui.QBrush(QtGui.QColor(107, 107, 107),
+                                                  QtCore.Qt.SolidPattern)
         self.colors = {}
-        self.colors['normalBorder'] = QtGui.QColor(0,0,0)
+        self.colors['normalBorder'] = QtGui.QColor(0, 0, 0)
         self.colors['selectedBorder'] = QtGui.QColor(200, 120, 10)
 
         self.sizeBackground()
@@ -48,11 +50,11 @@ class Node(QtGui.QGraphicsItem):
         self.sizeBackground()
 
     def inPorts(self):
-        return [p for p in self.ports if p.direction=='in']
+        return [p for p in self.ports if p.direction == 'in']
 
     def outPorts(self):
-        return [p for p in self.ports if p.direction=='out']
-    
+        return [p for p in self.ports if p.direction == 'out']
+
     def arrangePorts(self):
         for i, port in enumerate(self.inPorts()):
             port.setPos(0, Port.PortHeight * i + self.NodeTopPadding)
@@ -63,14 +65,15 @@ class Node(QtGui.QGraphicsItem):
     def sizeBackground(self):
         numPortsTall = max(len(self.inPorts()), len(self.outPorts()))
 
-        self.backgroundHeight = (self.NodeTopPadding + 
-            self.NodeBottomPadding + 
-            (numPortsTall-1)*Port.PortHeight)
+        self.backgroundHeight = (self.NodeTopPadding +
+                                 self.NodeBottomPadding +
+                                 (numPortsTall-1)*Port.PortHeight
+                                 )
 
     def boundingRect(self):
         penWidth = 1.0
-        return QtCore.QRectF(- penWidth / 2,- penWidth / 2,
-                      150 + penWidth, self.backgroundHeight)
+        return QtCore.QRectF(-penWidth / 2, -penWidth / 2,
+                             150 + penWidth, self.backgroundHeight)
 
     def paint(self, painter, option, widget):
         painter.setBrush(self.brushes['background'])
@@ -94,8 +97,8 @@ class Node(QtGui.QGraphicsItem):
 
     def wires(self):
         wires = [item for item in self.scene().items()
-            if type(item)==Wire
-            if (self.hasPort(item.port1) or self.hasPort(item.port2))]
+                 if type(item) == Wire
+                 if (self.hasPort(item.port1) or self.hasPort(item.port2))]
 
         return wires
 
