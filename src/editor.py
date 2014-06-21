@@ -14,6 +14,7 @@ from devices.dsk import Dsk
 from devices.ustream_provider import UstreamProvider
 from devices.audio_out import AudioOut
 from devices.audio_test_gen import AudioTestGen
+from devices.deck import Deck
 
 from graph.node import Node
 
@@ -128,6 +129,9 @@ class MainWindow(QMainWindow):
 
         if node.deviceClass == AudioTestGen:
             device = AudioTestGen(node.name)
+
+        if node.deviceClass == Deck:
+            device = Deck(node.name)
 
         self.station.add_device(device)
         node.setDevice(device)

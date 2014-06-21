@@ -32,6 +32,15 @@ print "Loading Configuration"
 # self.wire('video1.out', 'ustream_provider1.in')
 
 # # Audio Test
-self.install(AudioTestGen, "testgen1", (100, 100))
+# self.install(AudioTestGen, "testgen1", (100, 100))
+# self.install(AudioOut, "audioout1", (300, 100))
+# self.wire('testgen1.out', 'audioout1.in')
+
+# Deck Test
+d, n = self.install(Deck, "deck1", (0,0))
 self.install(AudioOut, "audioout1", (300, 100))
-self.wire('testgen1.out', 'audioout1.in')
+self.install(Monitor, "monitor1", (300,0))
+self.wire('deck1.video_out', 'monitor1.in')
+self.wire('deck1.audio_out', 'audioout1.in')
+
+d.file_uri.set_value('file:///home/lsimons/workspace/open-playout/media/3wanderings.mpg')

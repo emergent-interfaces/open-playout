@@ -16,7 +16,8 @@ class Device(object):
     DEFAULT_VIDEO_CAPS = "video/x-raw,format=I420,width=" + \
                          str(DEFAULT_VIDEO_WIDTH) + \
                          ",height=" + \
-                         str(DEFAULT_VIDEO_HEIGHT)
+                         str(DEFAULT_VIDEO_HEIGHT) + \
+                         ",framerate=30/1"
 
     DEFAULT_AUDIO_CHANNELS = 2
     DEFAULT_AUDIO_CAPS = "audio/x-raw,channels=(int)" + \
@@ -35,6 +36,19 @@ class Device(object):
         self.ports = []
         self.actions = {}
         self.controlPanels = []
+
+    def add_element(self, element_name):
+        element = Gst.ElementFactory.make(element_name, None)
+        self.bin.add(element)
+        return element
+
+    def link_series(self, *elements):
+        for i, element in enumerate(elements):
+            if i == len(elements) - 1:
+                break
+
+            element.link(elements[i+1])
+
 
     # todo Implement device_pad_name choice
     def add_input_video_port_on(self, device, device_pad_name="sink", port_name="in"):
