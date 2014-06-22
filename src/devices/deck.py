@@ -46,6 +46,7 @@ class Deck(Device):
         self.decodebin = self.add_element('uridecodebin')
         self.decodebin.connect("pad-added", self.on_new_decoded_pad)
         self.decodebin.connect("no-more-pads", self.on_no_more_pads)
+        self.decodebin.connect("drained", self.on_drained)
 
         self.decodebin.set_property('uri', file_uri)
 
@@ -74,13 +75,26 @@ class Deck(Device):
             self.audio_rate.set_state(Gst.State.NULL)
 
             pad.link(self.audio_convert.get_static_pad("sink"))
-            
+
             self.audio_convert.set_state(Gst.State.PLAYING)
             self.audio_rate.set_state(Gst.State.PLAYING)
 
     def on_no_more_pads(self, decodebin):
         print "Uridecodebin done adding pads"
-        
+        self.select_file_video()
+
+    def on_drained(self, decodebin):
+        print "Decodebin drained!"
+        self.select_default_video()
+
+    def select_default_video(self):
+        pad = self.video_selector.get_static_pad('sink_0')
+        self.video_selector.set_property('active-pad', pad)
+
+        pad = self.audio_selector.get_static_pad('sink_0')
+        self.audio_selector.set_property('active-pad', pad)
+
+    def select_file_video(self):
         pad = self.video_selector.get_static_pad('sink_1')
         self.video_selector.set_property('active-pad', pad)
 
