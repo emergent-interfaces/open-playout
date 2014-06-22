@@ -7,9 +7,6 @@ except ValueError:
     sys.exit(1)
 from gi.repository import GObject, Gst
 
-from devices.monitor import Monitor
-from display import Display
-
 os.environ["GST_DEBUG"] = "1"
 os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
 os.putenv('GST_DEBUG_DUMP_DIR_DIR', '/tmp')
@@ -30,10 +27,6 @@ Gst.init(None)
 
 pipeline = Gst.Pipeline()
 bus = pipeline.get_bus()
-
-
-device = Monitor("monitor1", (320, 240), (0, 0))
-device.display = Display(self, device)
 
 bin = Gst.Bin.new("bin1")
 
@@ -58,4 +51,6 @@ while cmd != "exit":
         os.system("dot -Tpng -o /tmp/pipeline.png /tmp/pipeline.dot")
 
     if cmd == "go":
-        decodebin.set_property('uri', 'file:///home/lsimons/workspace/open-playout/media/3wanderings.mpg')
+        #uri = 'file:///home/lsimons/workspace/open-playout/media/sintel_trailer-480p.mp4'
+        uri = 'file:///home/lsimons/workspace/open-playout/media/3wanderings.mpg'
+        decodebin.set_property('uri', uri)

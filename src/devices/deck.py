@@ -56,8 +56,8 @@ class Deck(Device):
         
         self.audio_convert = self.add_element('audioconvert')
         self.audio_rate = self.add_element('audiorate')
-        self.link_series(self.audio_convert, self.audio_rate)
-        self.audio_rate.link_filtered(self.audio_selector, Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS))
+        self.link_series(self.audio_convert, self.audio_rate, self.audio_selector)
+        #self.audio_rate.link_filtered(self.audio_selector, Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS))
 
     def on_new_decoded_pad(self, decodebin, pad):
         caps_string = pad.get_current_caps().to_string()
@@ -68,7 +68,15 @@ class Deck(Device):
             pad.link(self.video_convert.get_static_pad("sink"))
 
         if "audio/x-raw" in caps_string:
+            # Need to set conversion elements to NULL and back, otherwise
+            # caps aren't always fixed
+            self.audio_convert.set_state(Gst.State.NULL)
+            self.audio_rate.set_state(Gst.State.NULL)
+
             pad.link(self.audio_convert.get_static_pad("sink"))
+            
+            self.audio_convert.set_state(Gst.State.PLAYING)
+            self.audio_rate.set_state(Gst.State.PLAYING)
 
     def on_no_more_pads(self, decodebin):
         print "Uridecodebin done adding pads"
