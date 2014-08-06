@@ -58,7 +58,13 @@ class Deck(Device):
         self.audio_convert = self.add_element('audioconvert')
         self.audio_rate = self.add_element('audiorate')
         self.link_series(self.audio_convert, self.audio_rate, self.audio_selector)
-        #self.audio_rate.link_filtered(self.audio_selector, Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS))
+
+    def unrack_video(self):
+        elements = [self.decodebin, self.video_convert, self.video_scale, self.video_rate,
+                    self.audio_convert, self.audio_rate]
+
+        for element in elements:
+            element.set_state(Gst.State.NULL)
 
     def on_new_decoded_pad(self, decodebin, pad):
         caps_string = pad.get_current_caps().to_string()
@@ -86,6 +92,7 @@ class Deck(Device):
     def on_drained(self, decodebin):
         print "Decodebin drained!"
         self.select_default_video()
+        self.unrack_video()
 
     def select_default_video(self):
         pad = self.video_selector.get_static_pad('sink_0')
