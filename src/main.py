@@ -23,6 +23,8 @@ class Main:
         parser.add_argument('-g', '--graph',
                             help="Generate graph of pipeline",
                             action='store_true')
+        parser.add_argument('-c', '--config',
+                            help="Load configuration file")
         self.args = parser.parse_args()
 
         GObject.threads_init()

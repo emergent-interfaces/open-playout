@@ -1,0 +1,6 @@
+self.install(VideoTestGen, "video1", (100, 100))
+d, n = self.install(Dsk, "dsk1", (300, 100))
+d.file.set_value('../media/lower_third.svg')
+self.install(Monitor, "screen1", (500, 100))
+self.wire('video1.out', 'dsk1.in')
+self.wire('dsk1.out', 'screen1.in')

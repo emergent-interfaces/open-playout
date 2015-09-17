@@ -38,7 +38,7 @@ class GuiApp():
         self.station.run()
 
         self.app = QApplication(sys.argv)
-        frame = MainWindow(self.station)
+        frame = MainWindow(self.station, args)
         frame.show()
         sys.exit(self.app.exec_())
 
@@ -51,11 +51,18 @@ class Communicate(QtCore.QObject):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, station, parent=None):
+    def __init__(self, station, args, parent=None):
         super(MainWindow, self).__init__(parent)
         self.station = station
         self.initUI()
-        execfile('config.py')
+
+        if args.config:
+            try:
+                execfile(args.config)
+                print("Loaded {0}".format(args.config))
+            except Exception, info:
+                print("Unable to load {0}".format(args.config))
+                print(info)
 
     def initUI(self):
         hbox = QtGui.QHBoxLayout(self)
