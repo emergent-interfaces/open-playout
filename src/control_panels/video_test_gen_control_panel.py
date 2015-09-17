@@ -1,6 +1,7 @@
 from PySide import QtGui
 from control_panel import ControlPanel
 
+
 class VideoTestGenControlPanel(ControlPanel):
     def __init__(self, device, parent):
         super(VideoTestGenControlPanel, self).__init__(device, parent)

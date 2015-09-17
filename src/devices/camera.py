@@ -25,7 +25,8 @@ class Camera(Device):
         self.bin.add(self.convert)
 
         self.caps_filter = Gst.ElementFactory.make('capsfilter', None)
-        self.caps_filter.set_property('caps', Gst.caps_from_string(Device.DEFAULT_VIDEO_CAPS))
+        caps = Gst.caps_from_string(Device.DEFAULT_VIDEO_CAPS)
+        self.caps_filter.set_property('caps', caps)
         self.bin.add(self.caps_filter)
 
         self.src.link(self.convert)

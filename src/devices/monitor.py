@@ -40,7 +40,7 @@ class Monitor(Device):
         self.scale.link(self.sink)
 
         self.add_input_video_port_on(self.convert)
-        
+
     def get_sink(self):
         return self.sink
 
@@ -55,6 +55,6 @@ class Monitor(Device):
 
     def prepare_for_removal(self):
         super(Monitor, self).prepare_for_removal()
-        
+
         if self.display:
             self.display.close()

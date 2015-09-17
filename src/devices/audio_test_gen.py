@@ -2,7 +2,6 @@ import gi
 import sys
 from device import Device
 from observable_variable import ObservableVariable
-
 from control_panels.audio_test_gen_control_panel import AudioTestGenControlPanel
 
 try:

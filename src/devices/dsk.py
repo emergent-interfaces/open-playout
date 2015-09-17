@@ -15,6 +15,7 @@ except ValueError:
 
 from gi.repository import Gst
 
+
 class Dsk(Device):
     suggested_name = "dsk"
     suggested_readable_name = "DSK"
@@ -29,8 +30,8 @@ class Dsk(Device):
         self.alpha = ObservableVariable(0)
         self.alpha.changed.connect(self.alpha_changed)
 
-        # While input convert doesn't seem explicitly necessary, it seems to give
-        # better performance.  Not sure why.
+        # While input convert doesn't seem explicitly necessary, it seems to
+        # give better performance.  Not sure why.
         self.inputconvert = self.add_element('videoconvert')
         self.mixer = self.add_element('videomixer')
         self.outputconvert = self.add_element('videoconvert')
@@ -52,7 +53,8 @@ class Dsk(Device):
         self.convert = self.add_element('videoconvert')
         self.freeze = self.add_element('imagefreeze')
         self.caps = self.add_element('capsfilter')
-        self.caps.set_property('caps', Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
+        caps = Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS)
+        self.caps.set_property('caps', caps)
 
         self.filesrc.set_property('location', new_file)
 

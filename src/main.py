@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 import argparse
 import gi
 from gi.repository import GObject, GdkX11
@@ -15,12 +16,13 @@ from devices.video_test_gen import VideoTestGen
 os.environ["GST_DEBUG_DUMP_DOT_DIR"] = "/tmp"
 os.putenv('GST_DEBUG_DUMP_DIR_DIR', '/tmp')
 
+
 class Main:
     def __init__(self):
         parser = argparse.ArgumentParser()
         parser.add_argument('-g', '--graph',
-            help="Generate graph of pipeline",
-            action='store_true')
+                            help="Generate graph of pipeline",
+                            action='store_true')
         self.args = parser.parse_args()
 
         GObject.threads_init()
@@ -76,12 +78,13 @@ class Main:
                 self.station.add_device(switcher)
 
             if device_type == 'monitor':
-                monitor = Monitor(device_name, (320,240), (0,0))
+                monitor = Monitor(device_name, (320, 240), (0, 0))
                 self.station.add_device(monitor)
 
         if first_token == "remove":
             device_name = tokens.pop(0)
-            self.station.remove_device(self.station.find_device_by_name(device_name))
+            device = self.station.find_device_by_name(device_name)
+            self.station.remove_device(device)
 
         if first_token == "graph":
             self.station.graph_pipeline()

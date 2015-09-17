@@ -32,7 +32,8 @@ class Deck(Device):
         self.default_audio = self.add_element('audiotestsrc')
         self.default_audio.set_property('wave', 4)
         self.audio_selector = self.add_element('input-selector')
-        self.default_audio.link_filtered(self.audio_selector, Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS))
+        caps = Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS)
+        self.default_audio.link_filtered(self.audio_selector, caps)
 
         self.add_output_video_port_on(self.video_selector, 'src', 'video_out')
         self.add_output_audio_port_on(self.audio_selector, 'src', 'audio_out')
@@ -53,15 +54,17 @@ class Deck(Device):
         self.video_convert = self.add_element('videoconvert')
         self.video_scale = self.add_element('videoscale')
         self.video_rate = self.add_element('videorate')
-        self.link_series(self.video_convert, self.video_scale, self.video_rate, self.video_selector)
-        
+        self.link_series(self.video_convert, self.video_scale, self.video_rate,
+                         self.video_selector)
+
         self.audio_convert = self.add_element('audioconvert')
         self.audio_rate = self.add_element('audiorate')
-        self.link_series(self.audio_convert, self.audio_rate, self.audio_selector)
+        self.link_series(self.audio_convert, self.audio_rate,
+                         self.audio_selector)
 
     def unrack_video(self):
-        elements = [self.decodebin, self.video_convert, self.video_scale, self.video_rate,
-                    self.audio_convert, self.audio_rate]
+        elements = [self.decodebin, self.video_convert, self.video_scale,
+                    self.video_rate, self.audio_convert, self.audio_rate]
 
         for element in elements:
             element.set_state(Gst.State.NULL)

@@ -1,6 +1,7 @@
 from PySide import QtGui
 from control_panel import ControlPanel
 
+
 class DskControlPanel(ControlPanel):
     def __init__(self, device, parent):
         super(DskControlPanel, self).__init__(device, parent)
@@ -24,9 +25,11 @@ class DskControlPanel(ControlPanel):
 
         hbox.addWidget(self.fader)
 
-
     def change_file(self):
-        file_name, selected_filter = QtGui.QFileDialog.getOpenFileName(self, 'Image File', '.', 'Files (*.svg *.png)')
+        file_name, selected_filter = QtGui.QFileDialog.getOpenFileName(
+            self,
+            'Image File', '.', 'Files (*.svg *.png)'
+        )
 
         if file_name:
             self.device.file.set_value(file_name)

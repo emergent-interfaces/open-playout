@@ -86,7 +86,7 @@ class UstreamProvider(Device):
             self.bin.add(self.rtmpsink)
 
         self.flvmux_queue.link(self.rtmpsink)
-        
+
         self.rtmpsink.set_state(Gst.State.PLAYING)
 
         pad.remove_probe(info.id)

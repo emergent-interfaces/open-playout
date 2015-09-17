@@ -28,6 +28,7 @@ except ValueError:
 
 from gi.repository import Gst
 
+
 class GuiApp():
     def __init__(self):
         pass
@@ -47,6 +48,7 @@ class GuiApp():
 
 class Communicate(QtCore.QObject):
     cmdReceived = QtCore.Signal(str)
+
 
 class MainWindow(QMainWindow):
     def __init__(self, station, parent=None):
@@ -97,8 +99,9 @@ class MainWindow(QMainWindow):
         self.graphWidget.requestGraphDebug.connect(self.makeGraphDebug)
         self.graphWidget.controlPanelRequested.connect(self.makeControlPanel)
 
-    def install(self, deviceClass, name, (x,y)):
-        node = self.graphWidget.scene.addNode(Node(name, deviceClass), QtCore.QPointF(x,y))
+    def install(self, deviceClass, name, (x, y)):
+        node = self.graphWidget.scene.addNode(Node(name, deviceClass),
+                                              QtCore.QPointF(x, y))
         return node.device, node
 
     def wire(self, channel1, channel2):
@@ -143,7 +146,8 @@ class MainWindow(QMainWindow):
     def addLinkForWire(self, wire):
         port1_name = wire.port1.fullName()
         port2_name = wire.port2.fullName()
-        self.station.link("-".join([port1_name, port2_name]), port1_name, port2_name, wire.media_type)
+        self.station.link("-".join([port1_name, port2_name]), port1_name,
+                          port2_name, wire.media_type)
 
     def removeLinkForWire(self, wire):
         self.station.unlink(wire.port1.fullName(), wire.port2.fullName())
@@ -165,10 +169,8 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         for monitor in self.station.find_devices_by_type(Monitor):
-            monitor.set_window_id(0)   
+            monitor.set_window_id(0)
 
 if __name__ == "__main__":
         editor = Editor()
         sys.exit(editor.start())
-
-

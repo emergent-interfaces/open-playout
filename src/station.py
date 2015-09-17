@@ -1,4 +1,5 @@
-import gi, os
+import gi
+import os
 from devices.link import Link
 
 try:
@@ -8,6 +9,7 @@ except ValueError:
     sys.exit(1)
 
 from gi.repository import Gst, GstVideo
+
 
 class Station(object):
     def __init__(self, config, args):
@@ -25,7 +27,8 @@ class Station(object):
             self.graph_pipeline()
 
     def graph_pipeline(self):
-        Gst.debug_bin_to_dot_file(self.pipeline, Gst.DebugGraphDetails.ALL, "pipeline")
+        Gst.debug_bin_to_dot_file(self.pipeline, Gst.DebugGraphDetails.ALL,
+                                  "pipeline")
         try:
             os.system("dot -Tpng -o /tmp/pipeline.png /tmp/pipeline.dot")
         except Exception, e:
@@ -69,7 +72,8 @@ class Station(object):
         return None
 
     def find_devices_by_type(self, device_type):
-        return [device for device in self.devices if type(device) == device_type]
+        return [device for device in self.devices
+                if type(device) == device_type]
 
     def run(self):
         self.pipeline.set_state(Gst.State.PLAYING)

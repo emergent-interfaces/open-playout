@@ -138,12 +138,12 @@ class Switcher(Device):
                 break
 
             pad_info = "Pad: " + pad.get_name()
-            pad_info = pad_info + " (zorder: " + str(pad.get_property("zorder")) 
+            pad_info = pad_info + " (zorder: " + str(pad.get_property("zorder"))
             pad_info = pad_info + ", alpha: " + str(pad.get_property('alpha')) + ")"
-            print  pad_info
+            print pad_info
 
     def take(self, program_id=None):
-        if program_id == None:
+        if program_id is None:
             current_prog_id = self.program_active_id.get_value()
             current_prev_id = self.preview_active_id.get_value()
 

@@ -2,6 +2,7 @@ from PySide import QtGui
 from control_panel import ControlPanel
 from functools import partial
 
+
 class MonitorControlPanel(ControlPanel):
     def __init__(self, device, parent):
         super(MonitorControlPanel, self).__init__(device, parent)
@@ -78,5 +79,5 @@ class MonitorControlPanel(ControlPanel):
     def make_full_screen(self, screen_index):
         screenGeometry = QtGui.QDesktopWidget().screenGeometry(screen_index)
         x, y, width, height = screenGeometry.getRect()
-        self.device.location.set_value((x,y))
+        self.device.location.set_value((x, y))
         self.device.size.set_value((width, height))

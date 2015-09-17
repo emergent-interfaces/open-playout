@@ -49,7 +49,6 @@ class Device(object):
 
             element.link(elements[i+1])
 
-
     # todo Implement device_pad_name choice
     def add_input_video_port_on(self, device, device_pad_name="sink", port_name="in"):
         element_name = self.bin.get_name() + "." + port_name
@@ -60,7 +59,8 @@ class Device(object):
         intervideosrc.set_property('channel', channel)
         self.register_port(channel, port_name, 'video', 'in')
 
-        intervideosrc.link_filtered(device, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
+        caps = Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS)
+        intervideosrc.link_filtered(device, caps)
 
     # todo Implement device_pad_name choice
     def add_output_video_port_on(self, device, device_pad_name="src", port_name="out"):
@@ -72,7 +72,8 @@ class Device(object):
         intervideosink.set_property('channel', channel)
         self.register_port(channel, port_name, 'video', 'out')
 
-        device.link_filtered(intervideosink, Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS))
+        caps = Gst.caps_from_string(self.DEFAULT_VIDEO_CAPS)
+        device.link_filtered(intervideosink, caps)
 
     # todo Implement device_pad_name choice
     def add_input_audio_port_on(self, device, device_pad_name="sink", port_name="in"):
@@ -84,7 +85,8 @@ class Device(object):
         interaudiosrc.set_property('channel', channel)
         self.register_port(channel, port_name, 'audio', 'in')
 
-        interaudiosrc.link_filtered(device, Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS))
+        caps = Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS)
+        interaudiosrc.link_filtered(device, caps)
 
     # todo Implement device_pad_name choice
     def add_output_audio_port_on(self, device, device_pad_name="src", port_name="out"):
@@ -96,7 +98,8 @@ class Device(object):
         interaudiosink.set_property('channel', channel)
         self.register_port(channel, port_name, 'audio', 'out')
 
-        device.link_filtered(interaudiosink, Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS))
+        caps = Gst.caps_from_string(self.DEFAULT_AUDIO_CAPS)
+        device.link_filtered(interaudiosink, caps)
 
     def register_port(self, channel, name, media_type, direction):
         self.ports.append({
