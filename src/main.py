@@ -25,6 +25,8 @@ class Main:
                             action='store_true')
         parser.add_argument('-c', '--config',
                             help="Load configuration file")
+        parser.add_argument('-d', '--gst-debug', type=int,
+                            help="GST debug level")
         self.args = parser.parse_args()
 
         GObject.threads_init()

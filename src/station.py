@@ -14,7 +14,9 @@ from gi.repository import Gst, GstVideo
 class Station(object):
     def __init__(self, config, args):
 
-        os.environ["GST_DEBUG"] = "3"
+        if args.gst_debug:
+            os.environ["GST_DEBUG"] = str(args.gst_debug)
+
         Gst.init(None)
 
         self.pipeline = Gst.Pipeline()
